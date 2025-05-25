@@ -8,7 +8,6 @@ controller/ReportController.class
 controller/EmailService$1.class
 controller/ManageGradesController$2.class
 model/Student.class
-controller/ManageUsersController$3.class
 controller/ExistingStudentController$2.class
 controller/StudentGradeController.class
 controller/ExistingStudentController$5.class

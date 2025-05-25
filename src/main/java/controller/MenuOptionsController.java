@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 
 /**
  *
@@ -56,6 +58,24 @@ public class MenuOptionsController implements Initializable, MainControllerAware
 
     @FXML
     private ImageView iusers;
+    
+    @FXML
+    private Rectangle Rectangle1;
+
+    @FXML
+    private Rectangle Rectangle2;
+
+    @FXML
+    private Rectangle Rectangle3;
+    
+    @FXML
+    private StackPane stackPane1;
+
+    @FXML
+    private StackPane stackPane2;
+
+    @FXML
+    private StackPane stackPane3;
 
     private final Map<String, String> pageMap = new HashMap<>();
 
@@ -63,7 +83,7 @@ public class MenuOptionsController implements Initializable, MainControllerAware
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        
         Image student = new Image(getClass().getResourceAsStream("/icons/student.gif"));
         istudents.setImage(student);
 
@@ -81,6 +101,15 @@ public class MenuOptionsController implements Initializable, MainControllerAware
 
         Image help = new Image(getClass().getResourceAsStream("/icons/help.gif"));
         ihelp.setImage(help);
+        
+        Rectangle1.widthProperty().bind(stackPane1.widthProperty());
+        Rectangle1.heightProperty().bind(stackPane1.heightProperty());
+        
+        Rectangle2.widthProperty().bind(stackPane2.widthProperty());
+        Rectangle2.heightProperty().bind(stackPane2.heightProperty());
+        
+        Rectangle3.widthProperty().bind(stackPane3.widthProperty());
+        Rectangle3.heightProperty().bind(stackPane3.heightProperty());
 
         pageMap.put("Gestionar Estudiantes", "ManageStudents");
         pageMap.put("Configuracion", "SchoolSettings");

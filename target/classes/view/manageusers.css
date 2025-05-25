@@ -112,7 +112,6 @@ TableView {
 
 #VboxBtnUsers{
     -fx-alignment: center;
-    -fx-spacing: 35px;
 }
 
 #RegisterUser{
