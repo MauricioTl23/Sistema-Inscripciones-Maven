@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="410.0" prefWidth="634.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DocumentationController">
+    <stylesheets>
+        <URL value="@documentation.css" />
+    </stylesheets>
+   <children>
+      <VBox layoutX="11.0" layoutY="14.0" prefHeight="162.0" prefWidth="613.0">
+         <children>
+            <Label text="Documentacion General" />
+            <TableView prefHeight="74.0" prefWidth="596.0">
+              <columns>
+                <TableColumn prefWidth="63.0" text="ID" />
+                <TableColumn prefWidth="133.0" text="Nombre" />
+                  <TableColumn prefWidth="111.0" text="Obligatorio" />
+                  <TableColumn prefWidth="121.0" text="Entregado" />
+                  <TableColumn prefWidth="158.0" text="Fecha de entrega" />
+              </columns>
+            </TableView>
+         </children>
+      </VBox>
+      <VBox layoutX="11.0" layoutY="190.0" prefHeight="153.0" prefWidth="613.0">
+         <children>
+            <Label text="Documentacion Graduacion" />
+            <TableView prefHeight="200.0" prefWidth="200.0">
+               <columns>
+                  <TableColumn prefWidth="64.0" text="ID" />
+                  <TableColumn prefWidth="128.0" text="Nombre" />
+                  <TableColumn prefWidth="116.0" text="Obligatorio" />
+                  <TableColumn prefWidth="123.0" text="Entregado" />
+                  <TableColumn prefWidth="152.0" text="Fecha de entrega" />
+               </columns>
+            </TableView>
+         </children>
+      </VBox>
+      <Button layoutX="204.0" layoutY="356.0" mnemonicParsing="false" text="Guardar" />
+      <Button layoutX="327.0" layoutY="356.0" mnemonicParsing="false" text="Cancelar" />
+   </children>
+</AnchorPane>

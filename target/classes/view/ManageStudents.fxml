@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="497.0" prefWidth="753.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ManageStudentsController">
+    <stylesheets>
+        <URL value="@managestudents.css" />
+    </stylesheets>
+   <children>
+      <Button fx:id="btnEstudianteNuevo" layoutX="38.0" layoutY="42.0" mnemonicParsing="false" text="Estudiante Nuevo" />
+      <Label layoutX="311.0" layoutY="51.0" text="Buscar C.I.:" />
+      <TextField fx:id="TextSearch" layoutX="405.0" layoutY="45.0" />
+      <TableView fx:id="TblStudent" layoutX="7.0" layoutY="105.0" prefHeight="379.0" prefWidth="746.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="118.0" />
+   </children>
+</AnchorPane>

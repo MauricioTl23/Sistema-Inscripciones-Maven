@@ -1,0 +1,86 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+    -fx-background-color: linear-gradient(to bottom, #1b5e20, #66bb6a);
+}
+
+/* Fuente global para todo el proyecto */
+* {
+    -fx-font-family: "Open Sans";
+}
+
+/* Estilo de los botones */
+Button {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
+}
+
+Button:hover {
+    -fx-background-color: #1b5e20;
+}
+
+Button:pressed {
+    -fx-background-color: #0d3d14;
+}
+
+/* Estilo de los Labels */
+Label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+/* Estilo del TextField */
+TextField {
+    -fx-pref-width: 150px;
+    -fx-padding: 6px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #c8e6c9;
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: white;
+}
+
+TextField:focused {
+    -fx-border-color: #66bb6a;
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+
+TableView {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+/* Estilo de las columnas de la TableView */
+.table-column {
+    -fx-alignment: CENTER;
+    -fx-font-size: 14px;
+    -fx-background-color: #388e3c;
+    -fx-text-fill: white;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 5px;
+}
+
+/* Fondo del encabezado de las columnas con bordes redondeados */
+.table-view .column-header-background {
+    -fx-background-color: #388e3c;
+    -fx-background-radius: 8px 8px 8px 8px;
+}
+
+/* Texto del encabezado */
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}

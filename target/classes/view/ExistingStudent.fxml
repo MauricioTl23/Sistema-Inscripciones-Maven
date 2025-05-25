@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="532.0" prefWidth="1352.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ExistingStudentController">
+    <stylesheets>
+        <URL value="@existingstudent.css" />
+    </stylesheets>
+   <children>
+      <VBox layoutY="178.0" prefHeight="219.0" prefWidth="753.0">
+         <children>
+            <Label text="Datos del Estudiante" />
+            <GridPane prefHeight="168.0" prefWidth="729.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="121.0" minWidth="10.0" prefWidth="86.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.0" minWidth="0.0" prefWidth="130.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="123.0" minWidth="3.0" prefWidth="123.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="96.0" minWidth="1.0" prefWidth="96.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="10.0" prefWidth="50.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="88.0" minWidth="10.0" prefWidth="88.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+                <RowConstraints maxHeight="46.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="43.0" minHeight="8.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="45.0" minHeight="0.0" prefHeight="39.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Nombre(s)" GridPane.rowIndex="1" />
+                  <Label text="Apellidos(s)" GridPane.rowIndex="2" />
+                  <TextField fx:id="TextName" prefHeight="25.0" prefWidth="151.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="TextLast_name" layoutX="99.0" layoutY="20.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label layoutX="10.0" layoutY="24.0" text="Cedula Identidad" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Label layoutX="10.0" layoutY="67.0" text="Fecha nacimiento" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Label layoutX="266.0" layoutY="67.0" text="Genero" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="CboGender" prefWidth="150.0" promptText="XXXXX" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                  <TextField fx:id="TextCi" layoutX="92.0" layoutY="20.0" prefHeight="25.0" prefWidth="151.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <Label layoutX="10.0" layoutY="32.0" text="Direccion" GridPane.rowIndex="3" />
+                  <Label layoutX="10.0" layoutY="44.0" text="Correo" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <TextField fx:id="TextAddress" layoutX="110.0" layoutY="33.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="TextEmail" layoutX="110.0" layoutY="65.0" prefHeight="31.0" prefWidth="137.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Button fx:id="BtnAdd" mnemonicParsing="false" onAction="#BtnAddOnAction" text="Agregar" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                  <DatePicker fx:id="TimeDateBirth" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
+         </children>
+      </VBox>
+      <Button fx:id="btnDocumentacion" layoutX="442.0" layoutY="465.0" mnemonicParsing="false" text="Ver Documentacion" />
+      <Button fx:id="btnTutorNuevo" layoutX="36.0" layoutY="63.0" mnemonicParsing="false" onAction="#BtnAddOnAction" text="Tutor Nuevo" />
+      <Label layoutX="14.0" layoutY="14.0" text="Seleccionar Primeramente el tutor " />
+      <ComboBox fx:id="CboTutor" layoutX="208.0" layoutY="69.0" prefHeight="25.0" prefWidth="197.0" promptText="Tutor Existente" />
+      <TextField fx:id="TextRelacion" layoutX="442.0" layoutY="66.0" prefHeight="31.0" prefWidth="129.0" />
+      <ComboBox fx:id="CboTutor1" layoutX="208.0" layoutY="128.0" prefHeight="25.0" prefWidth="197.0" promptText="Tutor Existente" />
+      <TextField fx:id="TextRelacion1" layoutX="442.0" layoutY="125.0" prefHeight="31.0" prefWidth="129.0" />
+      <Button fx:id="btnModificar" layoutX="240.0" layoutY="465.0" mnemonicParsing="false" onAction="#onEdit" text="Modificar" />
+      <GridPane layoutX="727.0" layoutY="49.0" prefHeight="296.0" prefWidth="331.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="161.0" minWidth="10.0" prefWidth="99.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="10.0" prefWidth="232.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="53.0" minHeight="0.0" prefHeight="34.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="71.0" minHeight="7.0" prefHeight="36.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="100.0" minHeight="7.0" prefHeight="100.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Elegir Curso" GridPane.rowIndex="1" />
+            <ComboBox fx:id="CboCurso" prefHeight="25.0" prefWidth="197.0" promptText="Curso 1 A" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label prefHeight="32.0" prefWidth="184.0" text="Completar Inscripcion" GridPane.columnSpan="2" />
+            <Label text="RUDE" GridPane.rowIndex="2" />
+            <TextField fx:id="TextRude" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Observacion" GridPane.rowIndex="3" />
+            <TextArea fx:id="TextObs" prefHeight="144.0" prefWidth="318.0" style="-fx-background-color: rgba(255, 255, 255, 0.2);" GridPane.columnSpan="2" GridPane.rowIndex="4" GridPane.rowSpan="2" />
+         </children>
+      </GridPane>
+      <Button layoutX="838.0" layoutY="379.0" mnemonicParsing="false" onAction="#onEnrollment" text="Realizar Inscripcion" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="570.0" prefWidth="1279.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ManageUsersController">
+    <stylesheets>
+        <URL value="@manageusers.css" />
+    </stylesheets>
+    <children>
+        <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="646.0" layoutX="479.0" layoutY="23.0" stroke="BLACK" strokeType="INSIDE" width="938.0" />
+        <Label layoutX="1122.0" layoutY="57.0" text="Buscar C.I.:" />
+        <TextField fx:id="TextBuscarfCi" layoutX="1232.0" layoutY="53.0" prefHeight="31.0" prefWidth="174.0" />
+        <TableView fx:id="tblUser" layoutX="500.0" layoutY="114.0" prefHeight="540.0" prefWidth="900.0" />
+        <Rectangle arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="645.0" layoutX="19.0" layoutY="23.0" stroke="BLACK" strokeType="INSIDE" width="445.0" />
+        <VBox fx:id="VboxBtnUsers" layoutX="42.0" layoutY="43.0" prefHeight="499.0" prefWidth="399.0">
+            <children>
+                <Label fx:id="txttitle" prefHeight="22.0" prefWidth="190.0" text="REGISTRAR USUARIO" textAlignment="CENTER">
+                    <font>
+                        <Font name="Apple Braille" size="13.0" />
+                    </font>
+                </Label>
+                <GridPane fx:id="RegisterUser" prefHeight="290.0" prefWidth="445.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label text="Nombre(s)" />
+                        <TextField fx:id="TextFnameUser" GridPane.columnIndex="1" />
+                        <Label text="Apellidos(s)" GridPane.rowIndex="1" />
+                        <TextField fx:id="TextLnameUser" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="C.I." GridPane.rowIndex="2" />
+                        <Label text="Celular" GridPane.rowIndex="3" />
+                        <TextField fx:id="TextPhoneUser" prefWidth="173.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label text="Correo" GridPane.rowIndex="4" />
+                        <TextField fx:id="TextEmailUser" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label text="Cargo" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+                        <Label text="Contraseña" GridPane.rowIndex="7" />
+                        <TextField fx:id="TextPasswordUser" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <ComboBox fx:id="CboCharge" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label text="Usuario" GridPane.rowIndex="6" />
+                        <TextField fx:id="TextUserUser" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <HBox fx:id="hci" prefHeight="41.0" prefWidth="376.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <children>
+                                <TextField fx:id="TextCiUser" />
+                                <TextField fx:id="textcom" />
+                                <ComboBox fx:id="cbxexp" prefWidth="150.0" />
+                            </children>
+                        </HBox>
+                    </children>
+                </GridPane>
+                <Button fx:id="BtnAdd" mnemonicParsing="false" onAction="#BtnAddOnAction" prefHeight="34.0" prefWidth="128.0" text="AGREGAR" />
+                <Button fx:id="BtnCancelar" disable="true" mnemonicParsing="false" onAction="#BtnCancelarOnAction" prefHeight="34.0" prefWidth="130.0" text="CANCELAR" />
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
