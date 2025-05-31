@@ -1,0 +1,9 @@
+# Ignorar carpeta target y archivos compilados 
+/target/ 
+*.class 
+*.log 
+*.iml 
+.idea/ 
+.vscode/ 
+.DS_Store 
+Thumbs.db 
