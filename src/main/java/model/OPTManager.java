@@ -16,7 +16,7 @@ public class OPTManager {
     private String currentOTP;
     private LocalDateTime creationTime;
     private final int EXPIRATION_MINUTES = 10;
-    private SecureRandom random = new SecureRandom();
+    private final SecureRandom random = new SecureRandom();
 
     public String generateOTP() {
         int number = random.nextInt(900000) + 100000;

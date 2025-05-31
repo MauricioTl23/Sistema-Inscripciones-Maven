@@ -610,10 +610,11 @@ public class ManageGradesController implements Initializable, MainControllerAwar
 
                         new Thread(() -> {
                             try {
-                                if (verify.validateOTP(this.PasswordMod)) {
+                                if (verify.isOTPExpired()) {
                                     SendCodetothedirector();
                                 } else {
                                     System.out.println("Código OTP todavía válido, no se envía correo.");
+                                    System.out.println("El codigo es: "+ PasswordMod);
                                 }
 
                                 Platform.runLater(() -> {
