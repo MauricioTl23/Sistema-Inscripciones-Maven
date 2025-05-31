@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class GradeUpload {
         try (FileInputStream in = new FileInputStream(fileName)) {
             props.load(in);
         } catch (IOException e) {
-           
+
         }
 
         props.setProperty("fechaSubida", LocalDate.now().toString());
@@ -39,17 +40,22 @@ public class GradeUpload {
             e.printStackTrace();
         }
     }
-    
+
     public static boolean puedeModificarNotas(int idCurso, int gestion) {
         Properties props = new Properties();
         String fileName = getFileName(idCurso, gestion);
+        File archivo = new File(fileName);
 
-        try (FileInputStream in = new FileInputStream(fileName)) {
+        if (!archivo.exists()) {
+            System.out.println("Archivo no encontrado: " + fileName + ". Se permite modificar notas.");
+            return true;
+        }
+
+        try (FileInputStream in = new FileInputStream(archivo)) {
             props.load(in);
             String fechaStr = props.getProperty("fechaSubida");
 
             if (fechaStr == null) {
-
                 return true;
             }
 
@@ -60,7 +66,8 @@ public class GradeUpload {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return true;
+
+        return true; 
     }
 
 }

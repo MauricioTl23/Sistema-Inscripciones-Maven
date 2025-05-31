@@ -43,7 +43,7 @@
                                     <Font size="30.0" />
                                  </font>
                               </Label>
-                              <TextField prefHeight="40.0" prefWidth="274.0" />
+                              <TextField fx:id="TextSearchci" prefHeight="40.0" prefWidth="274.0" />
                            </children>
                            <HBox.margin>
                               <Insets right="10.0" />

@@ -35,6 +35,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -46,6 +47,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -75,6 +77,9 @@ public class ManageGradesController implements Initializable, MainControllerAwar
 
     @FXML
     private Button BtnToFinish;
+
+    @FXML
+    private TextField TextSearchci;
 
     @FXML
     private ComboBox<String> CbxCourses;
@@ -134,6 +139,8 @@ public class ManageGradesController implements Initializable, MainControllerAwar
     private ContextMenu OptionsStudent;
 
     private StudentNotes select;
+
+    private FilteredList<StudentNotes> filteredData;
 
     private final OPTManager verify = new OPTManager();
 
@@ -443,8 +450,8 @@ public class ManageGradesController implements Initializable, MainControllerAwar
 
     public void LoadList() {
 
-        TableNotes.getItems().clear();
-        TableNotes.getColumns().clear();
+        //TableNotes.getItems().clear();
+        //TableNotes.getColumns().clear();
 
         List<ListCourse> lista = null;
 
@@ -482,6 +489,9 @@ public class ManageGradesController implements Initializable, MainControllerAwar
 
         ObservableList<StudentNotes> data = FXCollections.observableArrayList(estudiantesOrdenados);
 
+        filteredData = new FilteredList<>(data, p -> true);
+        TableNotes.setItems(filteredData);
+
         // Columna número
         TableColumn<StudentNotes, Number> idCol = new TableColumn<>("N°");
         idCol.setCellValueFactory(cd
@@ -505,8 +515,7 @@ public class ManageGradesController implements Initializable, MainControllerAwar
             TableNotes.getColumns().add(colMateria);
         }
 
-        TableNotes.setItems(data);
-
+        //TableNotes.setItems(data);
     }
 
     @FXML
@@ -570,6 +579,8 @@ public class ManageGradesController implements Initializable, MainControllerAwar
         OptionsStudent.getItems().addAll(modify);
 
         CbxCourses.setOnAction((ActionEvent event) -> {
+            
+            TextSearchci.clear();
 
             if (!CbxCourses.getSelectionModel().isEmpty()) {
 
@@ -611,14 +622,20 @@ public class ManageGradesController implements Initializable, MainControllerAwar
                         new Thread(() -> {
                             try {
                                 if (verify.isOTPExpired()) {
+                                    this.PasswordMod = verify.generateOTP();
                                     SendCodetothedirector();
                                 } else {
-                                    System.out.println("Código OTP todavía válido, no se envía correo.");
-                                    System.out.println("El codigo es: "+ PasswordMod);
+                                    String lastCode = verify.getLastValidOTP();
+                                    if (lastCode == null) {
+                                        this.PasswordMod = verify.generateOTP();
+                                        SendCodetothedirector();
+                                    } else {
+                                        this.PasswordMod = lastCode;
+                                    }
                                 }
 
                                 Platform.runLater(() -> {
-                                    
+
                                     String password = Extras.showPasswordInput("Validacion", "Ingrese la contraseña.", "Contraseña: ");
 
                                     if (password == null || password.equals("")) {
@@ -686,6 +703,16 @@ public class ManageGradesController implements Initializable, MainControllerAwar
 
         });
 
+        TextSearchci.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(estudiante -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                return estudiante.getCi().toLowerCase().contains(newValue.toLowerCase());
+            });
+        });
+
     }
 
     public boolean esNotaValida(String nota) {
@@ -718,8 +745,6 @@ public class ManageGradesController implements Initializable, MainControllerAwar
     }
 
     private void SendCodetothedirector() throws MessagingException {
-
-        this.PasswordMod = verify.generateOTP();
 
         EmailService emailService = new EmailService();
 

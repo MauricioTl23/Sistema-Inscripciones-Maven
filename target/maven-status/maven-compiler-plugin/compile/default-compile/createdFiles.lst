@@ -13,6 +13,7 @@ controller/ExistingStudentController$5.class
 controller/SchoolSettingsController$4.class
 Dao/CourseDao.class
 controller/ManageStudentsController$1.class
+model/OPTManager$OTPEntry.class
 interfaces/MainControllerAware.class
 controller/ExistingStudentController$4.class
 Dao/UserDao.class
