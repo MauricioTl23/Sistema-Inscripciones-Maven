@@ -7,26 +7,30 @@ package controller;
 import Dao.AdvisorDao;
 import Dao.CourseDao;
 import Dao.ListCourseDao;
+import Dao.UserDao;
 import interfaces.MainControllerAware;
 import interfaces.DataReceiver;
+import jakarta.mail.MessagingException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -37,17 +41,24 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Course;
 import model.Extras;
+import model.GradeUpload;
 import model.ListCourse;
 import model.StudentNotes;
 import model.User;
+import model.OPTManager;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CellValue;
@@ -60,7 +71,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author mauricioteranlimari
  */
-public class ManageGradesController implements Initializable,MainControllerAware,DataReceiver{
+public class ManageGradesController implements Initializable, MainControllerAware, DataReceiver {
+
+    @FXML
+    private Button BtnToFinish;
 
     @FXML
     private ComboBox<String> CbxCourses;
@@ -75,7 +89,75 @@ public class ManageGradesController implements Initializable,MainControllerAware
     private Button BtnUploadFile;
 
     @FXML
-    void OpenFile(ActionEvent event) {
+    private Rectangle rectangle1;
+
+    @FXML
+    private Rectangle rectangle2;
+
+    @FXML
+    private Rectangle rectangle3;
+
+    @FXML
+    private StackPane stack1;
+
+    @FXML
+    private StackPane stack2;
+
+    @FXML
+    private StackPane stack3;
+
+    @FXML
+    private VBox MainVBox;
+
+    private Map<String, String> pageMap = new HashMap<>();
+
+    private MainMenuController mainController;
+
+    private User advisor;
+
+    private AdvisorDao advisordao;
+
+    private ListCourseDao listcoursedao;
+
+    private CourseDao coursedao;
+
+    private int idcurso;
+
+    private String nivel;
+
+    private String grado;
+
+    private char paralelo;
+
+    private SchoolSettingsController st;
+
+    private ContextMenu OptionsStudent;
+
+    private StudentNotes select;
+
+    private final OPTManager verify = new OPTManager();
+
+    private String temporarynote = "";
+
+    private final String[] optionsLevel = {"Primaria", "Secundaria"};
+
+    public String[] optionsGrade = {"Primero", "Segundo", "Tercero", "Cuarto", "Quinto", "Sexto"};
+
+    // private final String[] departments = {"LP", "SCZ", "CBBA", "OR", "PT", "CH", "TJA", "BE", "PD"};
+    private String PasswordMod = "";
+
+    private UserDao userdao;
+
+    public void setAdvisor(User user) {
+        this.advisor = user;
+    }
+
+    public User getAdvisor() {
+        return advisor;
+    }
+
+    @FXML
+    void OpenFile(ActionEvent event) throws SQLException {
 
         if (!CbxCourses.getSelectionModel().isEmpty()) {
             FileChooser fileChooser = new FileChooser();
@@ -113,6 +195,8 @@ public class ManageGradesController implements Initializable,MainControllerAware
                     boolean rsp = listcoursedao.SaveNotes(notas, this.idcurso, LocalDate.now().getYear());
                     if (rsp) {
                         Extras.showAlert("Exito", "Notas subidas correctamente", Alert.AlertType.INFORMATION);
+                        GradeUpload.guardarFechaSubida(idcurso, LocalDate.now().getYear());
+                        Extras.showAlert("Informacion", "Las notas se subieron el " + LocalDate.now() + ", solo tiene 7 dias para modificar las notas en caso de haber cometido errores.", Alert.AlertType.INFORMATION);
                         LoadList();
                     } else {
                         Extras.showAlert("Error", "Error al subir notas", Alert.AlertType.ERROR);
@@ -123,66 +207,6 @@ public class ManageGradesController implements Initializable,MainControllerAware
             Extras.showAlert("Advertencia", "Debe seleccionar un curso!", Alert.AlertType.WARNING);
         }
 
-    }
-    private Map<String, String> pageMap = new HashMap<>();
-
-    private MainMenuController mainController;
-
-    private User advisor;
-
-    private AdvisorDao advisordao;
-
-    private ListCourseDao listcoursedao;
-
-    private CourseDao coursedao;
-
-    private int idcurso;
-
-    private String nivel;
-
-    private String grado;
-
-    private char paralelo;
-
-    private SchoolSettingsController st;
-
-    private String[] optionsLevel = {"Primaria", "Secundaria"};
-
-    public String[] optionsGrade = {"Primero", "Segundo", "Tercero", "Cuarto", "Quinto", "Sexto"};
-
-    private final String[] departments = {"LP", "SCZ", "CBBA", "OR", "PT", "CH", "TJA", "BE", "PD"};
-
-    private String PasswordMod = "DiseñoSistemas2025";
-
-    public void setAdvisor(User user) {
-        this.advisor = user;
-    }
-
-    public User getAdvisor() {
-        return advisor;
-    }
-
-    public String convertCi(String ci) {
-        if (ci == null || !ci.contains("-")) {
-            return null;
-        }
-
-        int lastDashIndex = ci.lastIndexOf("-");
-        if (lastDashIndex == -1 || lastDashIndex == ci.length() - 1) {
-            return null;
-        }
-
-        String ciBase = ci.substring(0, lastDashIndex).trim();
-        String sufijo = ci.substring(lastDashIndex + 1).trim();
-
-        // Buscar el índice del sufijo
-        for (int i = 0; i < departments.length; i++) {
-            if (departments[i].equalsIgnoreCase(sufijo)) {
-                return ciBase + "-" + i;
-            }
-        }
-
-        return null;
     }
 
     public void init() {
@@ -203,24 +227,20 @@ public class ManageGradesController implements Initializable,MainControllerAware
             ObservableList<String> observableCursos = FXCollections.observableArrayList(listaCursosFormateados);
             CbxCourses.setItems(observableCursos);
             CbxCourses.setValue("Seleccione");
+            BtnUploadFile.setDisable(true);
 
         }
     }
 
-    private List<String> readnotes(File archivo) {
-        List<String> listaNotas = new ArrayList<>();
+    private List<String> readnotes(File archivo) throws SQLException {
 
         List<ListCourse> lista = null;
 
-        Set<String> ciExistentes = new HashSet<>();
-        try {
-            lista = listcoursedao.listnotes(idcurso, LocalDate.now().getYear());
-            for (ListCourse lc : lista) {
-                ciExistentes.add(lc.getCedula_identidad());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ManageGradesController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        lista = listcoursedao.listnotes(idcurso, LocalDate.now().getYear());
+
+        List<String> ciExistentes = lista.stream().map(ListCourse::getCedula_identidad).filter(Objects::nonNull).map(String::trim).toList();
+
+        List<String> listaNotas = new ArrayList<>();
 
         try {
 
@@ -249,7 +269,16 @@ public class ManageGradesController implements Initializable,MainControllerAware
                 linea.append(celdaNombre.getStringCellValue().trim()).append(",");
 
                 Cell celdaCedula = fila.getCell(2);
-                String ci = convertCi(celdaCedula != null ? celdaCedula.getStringCellValue().trim() : "");
+                String ci = "";
+
+                if (celdaCedula != null) {
+                    if (celdaCedula.getCellType() == CellType.STRING) {
+                        ci = celdaCedula.getStringCellValue().trim();
+                    } else {
+                        Extras.showAlert("Error", "El CI debe estar en formato de texto.", Alert.AlertType.ERROR);
+                        return null;
+                    }
+                }
 
                 if (!ciExistentes.contains(ci)) {
                     Extras.showAlert("Error", "Revise el ci de los estudiantes: " + ci, Alert.AlertType.ERROR);
@@ -410,6 +439,8 @@ public class ManageGradesController implements Initializable,MainControllerAware
         this.mainController = mainController;
     }
 
+    private final Set<String> materiasSet = new LinkedHashSet<>();
+
     public void LoadList() {
 
         TableNotes.getItems().clear();
@@ -425,7 +456,6 @@ public class ManageGradesController implements Initializable,MainControllerAware
         }
 
         Map<String, StudentNotes> studentmap = new LinkedHashMap<>();
-        Set<String> materiasSet = new LinkedHashSet<>();
 
         for (ListCourse course : lista) {
             String key = course.getNameStudent() + "|" + course.getCedula_identidad();
@@ -466,46 +496,6 @@ public class ManageGradesController implements Initializable,MainControllerAware
         TableColumn<StudentNotes, String> ciCol = new TableColumn<>("CI");
         ciCol.setCellValueFactory(cd -> new ReadOnlyStringWrapper(cd.getValue().getCi()));
 
-        ciCol.setCellFactory(col -> new TableCell<StudentNotes, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null || !item.contains("-")) {
-                    setText(null);
-                } else {
-                    try {
-                        String[] parts = item.split("-");
-
-                        switch (parts.length) {
-                            case 2 -> {
-                                String base = parts[0];
-                                int index = Integer.parseInt(parts[1]);
-                                if (index >= 0 && index < departments.length) {
-                                    setText(base + "-" + departments[index]);
-                                } else {
-                                    setText(item);
-                                }
-                            }
-                            case 3 -> {
-                                String base = parts[0];
-                                String letra = parts[1];
-                                int index = Integer.parseInt(parts[2]);
-                                if (index >= 0 && index < departments.length) {
-                                    setText(base + "-" + letra + "-" + departments[index]);
-                                } else {
-                                    setText(item);
-                                }
-                            }
-                            default ->
-                                setText(item);
-                        }
-
-                    } catch (NumberFormatException e) {
-                        setText(item);
-                    }
-                }
-            }
-        });
         TableNotes.getColumns().addAll(idCol, nameCol, ciCol);
 
         // Columnas dinámicas para materias
@@ -519,8 +509,34 @@ public class ManageGradesController implements Initializable,MainControllerAware
 
     }
 
+    @FXML
+    void ToFinish(ActionEvent event) {
+        TableNotes.setEditable(false);
+        Extras.showAlert("Exito", "Modificacion de Notas Finalizada", Alert.AlertType.INFORMATION);
+        BtnToFinish.setVisible(false);
+        BtnToFinish.setDisable(true);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        stack1.prefHeightProperty().bind(MainVBox.heightProperty().multiply(1.5 / 10.0));
+        stack2.prefHeightProperty().bind(MainVBox.heightProperty().multiply(7.5 / 10.0));
+        stack3.prefHeightProperty().bind(MainVBox.heightProperty().multiply(1.0 / 10.0));
+
+        stack1.prefWidthProperty().bind(MainVBox.widthProperty());
+        stack2.prefWidthProperty().bind(MainVBox.widthProperty());
+        stack3.prefWidthProperty().bind(MainVBox.widthProperty());
+
+        rectangle1.widthProperty().bind(stack1.widthProperty());
+        rectangle1.heightProperty().bind(stack1.heightProperty());
+
+        rectangle2.widthProperty().bind(stack2.widthProperty());
+        rectangle2.heightProperty().bind(stack2.heightProperty());
+
+        rectangle3.widthProperty().bind(stack3.widthProperty());
+        rectangle3.heightProperty().bind(stack3.heightProperty());
+
         try {
             advisordao = new AdvisorDao();
         } catch (ClassNotFoundException | SQLException ex) {
@@ -533,6 +549,12 @@ public class ManageGradesController implements Initializable,MainControllerAware
             Logger.getLogger(ManageGradesController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        try {
+            userdao = new UserDao();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(ManageGradesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         st = new SchoolSettingsController();
 
         try {
@@ -541,15 +563,147 @@ public class ManageGradesController implements Initializable,MainControllerAware
             Logger.getLogger(ManageGradesController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        CbxCourses.setOnAction(event -> {
-            String seleccionado = CbxCourses.getSelectionModel().getSelectedItem();
-            this.idcurso = coursedao.idcourse(st.verifylevel(seleccionado), st.verifycourse(seleccionado));
+        OptionsStudent = new ContextMenu();
+
+        MenuItem modify = new MenuItem("Modificar Notas");
+
+        OptionsStudent.getItems().addAll(modify);
+
+        CbxCourses.setOnAction((ActionEvent event) -> {
+
             if (!CbxCourses.getSelectionModel().isEmpty()) {
+
+                String seleccionado = CbxCourses.getSelectionModel().getSelectedItem();
+
+                this.idcurso = coursedao.idcourse(st.verifylevel(seleccionado), st.verifycourse(seleccionado));
+
+                if (listcoursedao.NotesExist(idcurso, LocalDate.now().getYear())) {
+                    BtnUploadFile.setDisable(true);
+                } else {
+                    BtnUploadFile.setDisable(false);
+                }
+
                 LoadList();
+
+                if (GradeUpload.puedeModificarNotas(idcurso, LocalDate.now().getYear())) {
+
+                    TableNotes.setContextMenu(OptionsStudent);
+
+                    modify.setOnAction((ActionEvent t) -> {
+
+                        BtnUploadFile.setDisable(true);
+
+                        BtnToFinish.setVisible(true);
+                        BtnToFinish.setDisable(false);
+
+                        int index = TableNotes.getSelectionModel().getSelectedIndex();
+
+                        if (index != -1) {
+                            select = TableNotes.getItems().get(index);
+                        } else {
+                            return;
+                        }
+                        if (!listcoursedao.NotesExistStudent(select.getCi())) {
+                            Extras.showAlert("Advertencia", "El estudiante no tiene notas", Alert.AlertType.WARNING);
+                            return;
+                        }
+
+                        new Thread(() -> {
+                            try {
+                                if (verify.validateOTP(this.PasswordMod)) {
+                                    SendCodetothedirector();
+                                } else {
+                                    System.out.println("Código OTP todavía válido, no se envía correo.");
+                                }
+
+                                Platform.runLater(() -> {
+                                    
+                                    String password = Extras.showPasswordInput("Validacion", "Ingrese la contraseña.", "Contraseña: ");
+
+                                    if (password == null || password.equals("")) {
+                                        return;
+                                    } else if (!verify.validateOTP(password)) {
+                                        Extras.showAlert("Error", "La contraseña no coincide", Alert.AlertType.ERROR);
+                                        return;
+                                    }
+
+                                    // Si la contraseña es correcta, habilitamos edición y columnas:
+                                    TableNotes.setEditable(true);
+
+                                    TableNotes.getColumns().removeIf(col -> materiasSet.contains(col.getText()));
+
+                                    for (String materia : materiasSet) {
+                                        TableColumn<StudentNotes, String> colMateria = new TableColumn<>(materia);
+                                        colMateria.setCellValueFactory(cd -> cd.getValue().notaProperty(materia));
+                                        colMateria.setCellFactory(TextFieldTableCell.forTableColumn());
+
+                                        colMateria.setOnEditStart(editStartEvent -> {
+                                            StudentNotes student = editStartEvent.getRowValue();
+                                            String matter = colMateria.getText();
+                                            temporarynote = student.getNota(matter);
+                                        });
+
+                                        colMateria.setOnEditCommit(editEvent -> {
+                                            StudentNotes student = editEvent.getRowValue();
+                                            if (!student.getCi().equals(select.getCi())) {
+                                                Extras.showAlert("Error", "Solo puede editar al estudiante autorizado", Alert.AlertType.ERROR);
+                                                LoadList();
+                                                return;
+                                            }
+
+                                            String nuevaNota = editEvent.getNewValue();
+
+                                            if (!esNotaValida(nuevaNota)) {
+                                                Extras.showAlert("Error", "Valor de la nota no valido", Alert.AlertType.ERROR);
+                                                student.setNota(materia, temporarynote);
+                                                editEvent.getTableView().refresh();
+                                                editEvent.getTableView().edit(editEvent.getTablePosition().getRow(), colMateria);
+                                                return;
+                                            }
+                                            student.setNota(materia, nuevaNota);
+
+                                            boolean rsp = listcoursedao.updateNoteStudent(select.getCi(), materia, nuevaNota, LocalDate.now().getYear());
+
+                                            if (!rsp) {
+                                                Extras.showAlert("Error", "Error al modificar la nota", Alert.AlertType.ERROR);
+                                                LoadList();
+                                            }
+                                        });
+
+                                        TableNotes.getColumns().add(colMateria);
+                                    }
+                                });
+                            } catch (MessagingException ex) {
+                                Logger.getLogger(ManageGradesController.class.getName()).log(Level.SEVERE, null, ex);
+
+                            }
+                        }).start();
+
+                    });
+                }
             }
 
         });
 
+    }
+
+    public boolean esNotaValida(String nota) {
+        try {
+            BigDecimal bd = new BigDecimal(nota);
+
+            // Validar que no tenga más de 2 decimales
+            if (bd.scale() > 2) {
+                return false;
+            }
+
+            // Validar que esté entre 0 y 999.99 (decimal(5,2))
+            BigDecimal max = new BigDecimal("100.00");
+            BigDecimal min = BigDecimal.ZERO;
+
+            return !(bd.compareTo(min) < 0 || bd.compareTo(max) > 0);
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public void navigateTo(String pageName) {
@@ -560,5 +714,20 @@ public class ManageGradesController implements Initializable,MainControllerAware
         } else {
             System.out.println("Error: MainMenuController no está disponible.");
         }
+    }
+
+    private void SendCodetothedirector() throws MessagingException {
+
+        this.PasswordMod = verify.generateOTP();
+
+        EmailService emailService = new EmailService();
+
+        for (String emailDirector : userdao.EmailListDirectors()) {
+            emailService.enviarCorreo(emailDirector, "Código OTP para modificar notas",
+                    "Su código es: " + PasswordMod + ". Válido por 10 minutos.");
+        }
+
+        emailService.enviarCorreo("teranmauricio22@gmail.com", "Código OTP para modificar notas", "Su código es: " + PasswordMod + ". Válido por 10 minutos.");
+
     }
 }

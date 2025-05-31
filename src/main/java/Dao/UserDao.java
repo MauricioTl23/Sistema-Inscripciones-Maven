@@ -249,8 +249,6 @@ public class UserDao {
         }
     }
 
-    
-
     public String username(String user, String password) {
         ManageUsersController en = new ManageUsersController();
         String name = null;
@@ -294,7 +292,7 @@ public class UserDao {
 
             ResultSet data = sentence.executeQuery();
 
-            while (data.next() == true) {
+            while (data.next()) {
 
                 ListAdvisors.add(data.getString(1));
 
@@ -421,6 +419,38 @@ public class UserDao {
             return -1;
         }
 
+    }
+
+    public List<String> EmailListDirectors() {
+        List<String> DirectorsEmails = new ArrayList<>();
+        try {
+
+            String SQL = "SELECT correo "
+                    + "FROM usuario "
+                    + "WHERE cargo = 0";
+
+            Connection connection = this.UserConnection.getConnection();
+            PreparedStatement sentence = connection.prepareStatement(SQL);
+
+            ResultSet data = sentence.executeQuery();
+
+            while (data.next()) {
+
+                DirectorsEmails.add(data.getString(1));
+
+            }
+            data.close();
+            sentence.close();
+
+        } catch (Exception e) {
+            System.err.println("Ocurrio un error al listar email's");
+            System.err.println("Mensaje del error: " + e.getMessage());
+            System.err.println("Detalle del error: ");
+
+            e.printStackTrace();
+
+        }
+        return DirectorsEmails;
     }
 
 }

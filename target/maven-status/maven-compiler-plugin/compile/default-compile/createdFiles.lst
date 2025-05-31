@@ -6,7 +6,6 @@ controller/DocumentationController.class
 Dao/DocumentationDao.class
 controller/ReportController.class
 controller/EmailService$1.class
-controller/ManageGradesController$2.class
 model/Student.class
 controller/ExistingStudentController$2.class
 controller/StudentGradeController.class
@@ -49,6 +48,7 @@ model/StudentNotes.class
 controller/ManageGradesController.class
 controller/SchoolSettingsController$1.class
 Dao/Subject_courseDao.class
+model/GradeUpload.class
 controller/ExistingStudentController$1.class
 controller/LoginController.class
 com/mycompany/inscripcionesjo/InscripcionesJO.class
@@ -62,6 +62,7 @@ controller/SchoolSettingsController$3.class
 model/Course.class
 Dao/EnrollementDao.class
 model/Guardian.class
+model/OPTManager.class
 Dao/ListCourseDao.class
 model/Telf_Guardian.class
 controller/ManageUsersController$2.class

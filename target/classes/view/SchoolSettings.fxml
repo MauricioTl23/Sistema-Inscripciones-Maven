@@ -28,14 +28,14 @@
             <StackPane fx:id="stack1" prefHeight="13.0" prefWidth="1400.0" VBox.vgrow="ALWAYS">
                <children>
                     <Rectangle fx:id="Rectangle1" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="60.0" stroke="BLACK" strokeType="INSIDE" width="1400.0" />
-                  <HBox prefHeight="7.0" prefWidth="1360.0" spacing="10.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="7.0" prefWidth="1360.0" spacing="10.0" StackPane.alignment="CENTER">
                      <children>
-                          <ComboBox fx:id="CboxSelect" onAction="#setOnAction" prefHeight="30.0" prefWidth="200.0">
+                          <ComboBox fx:id="CboxSelect" onAction="#setOnAction" prefHeight="30.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <HBox.margin>
-                              <Insets left="25.0" />
+                              <Insets left="10.0" />
                            </HBox.margin>
                         </ComboBox>
-                        <HBox nodeOrientation="LEFT_TO_RIGHT" spacing="20.0">
+                        <HBox alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" spacing="20.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Label text="Buscar Curso:" />
                                 <ComboBox fx:id="cbxBgrades" prefWidth="150.0" />
@@ -47,12 +47,12 @@
                               <Insets left="350.0" />
                            </padding>
                            <HBox.margin>
-                              <Insets />
+                              <Insets right="10.0" />
                            </HBox.margin>
                         </HBox>
                      </children>
                      <StackPane.margin>
-                        <Insets bottom="5.0" left="25.0" right="25.0" top="15.0" />
+                        <Insets left="25.0" right="25.0" />
                      </StackPane.margin>
                   </HBox>
                </children>
@@ -184,7 +184,7 @@
                <children>
             
                     <Rectangle fx:id="Rectangle4" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="50.0" stroke="BLACK" strokeType="INSIDE" width="1400.0" />
-                    <HBox fx:id="HboxBtnC">
+                    <HBox fx:id="HboxBtnC" alignment="CENTER">
                         <children>
                             <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveOnAction" prefWidth="232.0" text="GUARDAR" />
                             <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#BtnCancelarOnAction" prefHeight="39.0" prefWidth="250.0" text="CANCELAR" />

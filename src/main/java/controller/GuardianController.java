@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import model.Extras;
 
 /**
@@ -76,6 +79,27 @@ public class GuardianController implements Initializable, MainControllerAware, D
     private TextField TextTelf_home1;
     @FXML
     private TextField TextTelf_personal1;
+
+    @FXML
+    private VBox MainVBox;
+
+    @FXML
+    private Rectangle rectangle1;
+
+    @FXML
+    private Rectangle rectangle2;
+
+    @FXML
+    private Rectangle rectangle3;
+
+    @FXML
+    private StackPane stack1;
+
+    @FXML
+    private StackPane stack2;
+
+    @FXML
+    private StackPane stack3;
 
     private GuardianDao guardianDao;
     private Telf_GuardianDao telf_GuardianDao;
@@ -127,6 +151,23 @@ public class GuardianController implements Initializable, MainControllerAware, D
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        stack1.prefHeightProperty().bind(MainVBox.heightProperty().multiply(4.5 / 10.0));
+        stack2.prefHeightProperty().bind(MainVBox.heightProperty().multiply(4.5 / 10.0));
+        stack3.prefHeightProperty().bind(MainVBox.heightProperty().multiply(1.0 / 10.0));
+        
+        stack1.prefWidthProperty().bind(MainVBox.widthProperty());
+        stack2.prefWidthProperty().bind(MainVBox.widthProperty());
+        stack3.prefWidthProperty().bind(MainVBox.widthProperty());
+        
+        rectangle1.widthProperty().bind(stack1.widthProperty());
+        rectangle1.heightProperty().bind(stack1.heightProperty());
+
+        rectangle2.widthProperty().bind(stack2.widthProperty());
+        rectangle2.heightProperty().bind(stack2.heightProperty());
+        
+        rectangle3.widthProperty().bind(stack3.widthProperty());
+        rectangle3.heightProperty().bind(stack3.heightProperty());
 
         try {
             this.guardianDao = new GuardianDao();
@@ -354,7 +395,7 @@ public class GuardianController implements Initializable, MainControllerAware, D
                     || TextCi1.getText().isEmpty() || TextEmail1.getText().isEmpty()
                     || TextRelacion1.getText().isEmpty()) {
 
-Extras.showAlert("Advertencia", "Todos los campos del tutor 1 deben estar completos.", Alert.AlertType.WARNING);
+                Extras.showAlert("Advertencia", "Todos los campos del tutor 1 deben estar completos.", Alert.AlertType.WARNING);
                 return;
             }
 
