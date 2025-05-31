@@ -31,7 +31,7 @@
         </VBox>
         <HBox fx:id="IconBox" alignment="CENTER" layoutX="50.0" layoutY="40.0" prefHeight="100.0" prefWidth="200.0">
             <children>
-                <ImageView fx:id="IconLogin" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                <ImageView fx:id="IconLogin" fitHeight="160.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" />
             </children>
         </HBox>
     </children>

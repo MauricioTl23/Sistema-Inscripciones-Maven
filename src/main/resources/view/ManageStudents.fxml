@@ -1,20 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="497.0" prefWidth="753.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ManageStudentsController">
+<AnchorPane id="AnchorPane" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ManageStudentsController">
     <stylesheets>
         <URL value="@managestudents.css" />
     </stylesheets>
    <children>
-      <Button fx:id="btnEstudianteNuevo" layoutX="38.0" layoutY="42.0" mnemonicParsing="false" text="Estudiante Nuevo" />
-      <Label layoutX="311.0" layoutY="51.0" text="Buscar C.I.:" />
-      <TextField fx:id="TextSearch" layoutX="405.0" layoutY="45.0" />
-      <TableView fx:id="TblStudent" layoutX="7.0" layoutY="105.0" prefHeight="379.0" prefWidth="746.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="118.0" />
+      <VBox fx:id="MainVBox" layoutX="305.0" layoutY="216.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+         <children>
+            <StackPane fx:id="stack1" prefHeight="84.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Rectangle fx:id="rectangle1" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="70.0" stroke="BLACK" strokeType="INSIDE" width="1000.0" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="483.0" spacing="450.0" StackPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="btnEstudianteNuevo" mnemonicParsing="false" prefHeight="34.0" prefWidth="262.0" text="Estudiante Nuevo" HBox.hgrow="ALWAYS" />
+                        <HBox alignment="CENTER_RIGHT" prefHeight="84.0" prefWidth="466.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="Buscar C.I.:" />
+                              <TextField fx:id="TextSearch" prefHeight="31.0" prefWidth="251.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                        </HBox>
+                     </children>
+                     <StackPane.margin>
+                        <Insets left="25.0" right="25.0" />
+                     </StackPane.margin>
+                  </HBox>
+               </children>
+            </StackPane>
+            <StackPane fx:id="stack2" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Rectangle fx:id="rectangle2" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="550.0" stroke="BLACK" strokeType="INSIDE" width="1000.0" />
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="429.0" spacing="15.0">
+                     <children>
+                        <Label fx:id="tittle1" alignment="CENTER" text="ESTUDIANTES REGISTRADOS" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font name="System Bold" size="40.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding></Label>
+                        <TableView fx:id="TblStudent" prefHeight="379.0" prefWidth="746.0" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin></TableView>
+                     </children>
+                     <StackPane.margin>
+                        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                     </StackPane.margin>
+                  </VBox>
+               </children>
+            </StackPane>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

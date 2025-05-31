@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Random;
+import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -34,7 +35,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import model.Extras;
@@ -46,6 +51,8 @@ import model.User;
  */
 public class ManageUsersController implements Initializable {
 
+    @FXML
+    private HBox MainHbox;
     @FXML
     private Button BtnCancelar;
     @FXML
@@ -74,6 +81,18 @@ public class ManageUsersController implements Initializable {
 
     @FXML
     private ComboBox<String> cbxexp;
+
+    @FXML
+    private Rectangle Rectangle1;
+
+    @FXML
+    private Rectangle Rectangle2;
+
+    @FXML
+    private StackPane stack1;
+
+    @FXML
+    private StackPane stack2;
 
     private UserDao userdao;
 
@@ -120,9 +139,9 @@ public class ManageUsersController implements Initializable {
 
             if (civalid(TextCiUser.getText(), textcom.getText(), cbxexp.getSelectionModel().getSelectedIndex())) {
                 if (textcom.getText() == null || textcom.getText().trim().isEmpty()) {
-                    cicomplete = TextCiUser.getText() + "-" + Integer.toString(cbxexp.getSelectionModel().getSelectedIndex());
+                    cicomplete = TextCiUser.getText() + "-" + cbxexp.getSelectionModel().getSelectedItem();
                 } else {
-                    cicomplete = TextCiUser.getText() + "-" + textcom.getText() + "-" + Integer.toString(cbxexp.getSelectionModel().getSelectedIndex());
+                    cicomplete = TextCiUser.getText() + "-" + textcom.getText() + "-" + cbxexp.getSelectionModel().getSelectedItem();
                 }
                 usuario.setCedula_identidad(cicomplete);
             } else {
@@ -263,25 +282,7 @@ public class ManageUsersController implements Initializable {
 
         TableColumn CIcol = new TableColumn("CI");
         CIcol.setCellValueFactory(new PropertyValueFactory("cedula_identidad"));
-        CIcol.setCellFactory(col -> new TableCell<User, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    String[] parts = item.split("-");
-
-                    String lastPart = parts[parts.length - 1];
-
-                    int lastNumber = Integer.parseInt(lastPart);
-
-                    String updatedItem = item.substring(0, item.lastIndexOf("-")) + "-" + departments[lastNumber];
-
-                    setText(updatedItem);
-                }
-            }
-        });
+        
         TableColumn Phonecol = new TableColumn("CELULAR");
         Phonecol.setCellValueFactory(new PropertyValueFactory("celular"));
 
@@ -427,15 +428,25 @@ public class ManageUsersController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        ObservableList<String> departments = FXCollections.observableArrayList(this.departments);
-        cbxexp.setItems(departments);
-        cbxexp.setValue("Selecciones");
+        stack1.prefWidthProperty().bind(MainHbox.widthProperty().multiply(1.0 / 3.0));
+        stack2.prefWidthProperty().bind(MainHbox.widthProperty().multiply(2.0 / 3.0));
+
+        stack1.prefHeightProperty().bind(MainHbox.heightProperty());
+        stack2.prefHeightProperty().bind(MainHbox.heightProperty());
+
+        Rectangle1.widthProperty().bind(stack1.widthProperty());
+        Rectangle1.heightProperty().bind(stack1.heightProperty());
+
+        Rectangle2.widthProperty().bind(stack2.widthProperty());
+        Rectangle2.heightProperty().bind(stack2.heightProperty());
+
+        ObservableList<String> dep = FXCollections.observableArrayList(this.departments);
+        cbxexp.setItems(dep);
+        cbxexp.setValue("Seleccione");
 
         try {
             this.userdao = new UserDao();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ManageUsersController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ManageUsersController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -454,16 +465,84 @@ public class ManageUsersController implements Initializable {
         OptionsUsers = new ContextMenu();
 
         //Verificacion de campos
-        TextFnameUser.textProperty().addListener((obs, oldText, newText) -> {
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+
+            // Permitir solo letras con tildes, ñ/Ñ y espacios
+            if (!newText.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*")) {
+                return null;
+            }
+
+            // Limitar a 100 caracteres
             if (newText.length() > 100) {
-                TextFnameUser.setText(oldText);
+                return null;
+            }
+
+            return change;
+        };
+
+        TextFormatter<String> formatter = new TextFormatter<>(filter);
+        TextFnameUser.setTextFormatter(formatter);
+
+        TextFnameUser.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && !newVal.isEmpty()) {
+                int caretPos = TextFnameUser.getCaretPosition();
+
+                StringBuilder result = new StringBuilder();
+                boolean capitalizeNext = true;
+
+                for (char c : newVal.toCharArray()) {
+                    if (Character.isWhitespace(c)) {
+                        result.append(c);
+                        capitalizeNext = true;
+                    } else if (capitalizeNext) {
+                        result.append(Character.toUpperCase(c));
+                        capitalizeNext = false;
+                    } else {
+                        result.append(Character.toLowerCase(c));
+                    }
+                }
+
+                String capitalized = result.toString();
+
+                if (!newVal.equals(capitalized)) {
+                    TextFnameUser.setText(capitalized);
+                    TextFnameUser.positionCaret(Math.min(caretPos, capitalized.length()));
+                }
             }
         });
-        TextLnameUser.textProperty().addListener((obs, oldText, newText) -> {
-            if (newText.length() > 100) {
-                TextLnameUser.setText(oldText);
+
+        TextFormatter<String> Ln = new TextFormatter<>(filter);
+        TextLnameUser.setTextFormatter(Ln);
+
+        TextLnameUser.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && !newVal.isEmpty()) {
+                int caretPos = TextLnameUser.getCaretPosition();
+
+                StringBuilder result = new StringBuilder();
+                boolean capitalizeNext = true;
+
+                for (char c : newVal.toCharArray()) {
+                    if (Character.isWhitespace(c)) {
+                        result.append(c);
+                        capitalizeNext = true;
+                    } else if (capitalizeNext) {
+                        result.append(Character.toUpperCase(c));
+                        capitalizeNext = false;
+                    } else {
+                        result.append(Character.toLowerCase(c));
+                    }
+                }
+
+                String capitalized = result.toString();
+
+                if (!newVal.equals(capitalized)) {
+                    TextLnameUser.setText(capitalized);
+                    TextLnameUser.positionCaret(Math.min(caretPos, capitalized.length()));
+                }
             }
         });
+        
         TextCiUser.textProperty().addListener((obs, oldText, newText) -> {
             if (!newText.matches("\\d*") || newText.length() > 8) {
                 TextCiUser.setText(oldText);
@@ -517,10 +596,10 @@ public class ManageUsersController implements Initializable {
 
             if (partes.length == 3) {
                 textcom.setText(partes[1]);
-                cbxexp.getSelectionModel().select(Integer.parseInt(partes[2]));
+                cbxexp.getSelectionModel().select(partes[2]);
             } else if (partes.length == 2) {
                 textcom.setText("");
-                cbxexp.getSelectionModel().select(Integer.parseInt(partes[1]));
+                cbxexp.getSelectionModel().select(partes[1]);
             }
             textcom.setEditable(false);
             cbxexp.setDisable(true);
@@ -571,5 +650,4 @@ public class ManageUsersController implements Initializable {
             });
         });
     }
-
 }

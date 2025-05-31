@@ -37,7 +37,7 @@ import model.User;
  * @author mauricioteranlimari
  */
 public class MainMenuController implements Initializable {
-    
+
     @FXML
     private AnchorPane contentPane;
     @FXML
@@ -102,8 +102,8 @@ public class MainMenuController implements Initializable {
     }
 
     public void setSubController(Object subController) {
-        if (subController instanceof MainControllerAware) {
-            ((MainControllerAware) subController).setMainController(this);
+        if (subController instanceof MainControllerAware mainControllerAware) {
+            mainControllerAware.setMainController(this);
         }
     }
 
@@ -199,7 +199,7 @@ public class MainMenuController implements Initializable {
 
             Object controller = loader.getController();
             System.out.println("Controlador cargado: " + controller);
-            
+
             boolean canLoad = true;
 
             if (controller instanceof DataReceiver dataReceiver) {
@@ -216,7 +216,7 @@ public class MainMenuController implements Initializable {
             }
 
             if (canLoad) {
-                
+
                 contentPane.getChildren().clear();
                 contentPane.getChildren().add(root);
 
@@ -250,5 +250,5 @@ public class MainMenuController implements Initializable {
         updateBreadcrumb();
 
     }
-    
+
 }
