@@ -1,0 +1,8 @@
+# Ignorar carpetas y archivos compilados
+/target/
+*.class
+
+
+
+/target/
+*.class
