@@ -52,11 +52,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.TextArea;
 import model.Enrollment;
+import Dao.SubmittedDocumentDao;
 
-/**
- *
- * @author mauricioteranlimari
- */
 public class ExistingStudentController implements Initializable, MainControllerAware, DataReceiver {
 
     @FXML
@@ -105,6 +102,7 @@ public class ExistingStudentController implements Initializable, MainControllerA
     private Student_GuardianDao student_GuardianDao;
     private CourseDao courseDao;
     private EnrollementDao enrollmentDao;
+    private SubmittedDocumentDao submittedDocumentDao;
     private Student selectStudent;
     private ObservableList<Guardian> listaTutores = FXCollections.observableArrayList();
     private FilteredList<Guardian> filteredTutores;
@@ -177,7 +175,17 @@ public class ExistingStudentController implements Initializable, MainControllerA
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        btnDocumentacion.setOnAction(e -> navigateTo("Documentacion", "Documentation"));
+        btnDocumentacion.setOnAction(e -> {
+            if (mainController != null) {
+                if (selectStudent != null) {
+                    mainController.loadSceneWithData("Documentation", selectStudent.getId());
+                    mainController.addPage("Documentación de " + selectStudent.getNombre() + " " + selectStudent.getApellido(), "Documentation");
+                }
+            } else {
+                System.out.println("Error: MainMenuController no está disponible.");
+            }
+            
+        });
         btnDocumentacion.setVisible(false);
         btnTutorNuevo.setOnAction(e -> navigateTo("Nuevo Tutor", "Guardian"));
 
@@ -187,6 +195,7 @@ public class ExistingStudentController implements Initializable, MainControllerA
             this.studentdao = new StudentDao();
             this.courseDao = new CourseDao();
             this.enrollmentDao = new EnrollementDao();
+            this.submittedDocumentDao = new SubmittedDocumentDao();
 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ManageUsersController.class.getName()).log(Level.SEVERE, null, ex);
@@ -544,7 +553,8 @@ public class ExistingStudentController implements Initializable, MainControllerA
 
         //Para verificar si se puede guardar en la base de datos
         int idStudent = this.studentdao.register(estudiante);
-        System.out.println("Id estudiante " + idStudent + " id tutor " + idtutor1 + "Realcion " + TextRelacion.getText());
+        
+        System.out.println("Id estudiante " + idStudent + " id tutor " + idtutor1 + "Relacion " + TextRelacion.getText());
 
         boolean rsp = this.student_GuardianDao.register(idtutor1, idStudent, TextRelacion.getText());
         boolean rsp1 = false;
@@ -695,9 +705,9 @@ public class ExistingStudentController implements Initializable, MainControllerA
             inscripcion.setRude(Integer.parseInt(TextRude.getText()));
             inscripcion.setObservacion(TextObs.getText());
 
-            boolean success = enrollmentDao.register(inscripcion);
+            int success = enrollmentDao.register(inscripcion);
 
-            if (success) {
+            if (success > 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Éxito");
                 alert.setHeaderText(null);
@@ -707,6 +717,8 @@ public class ExistingStudentController implements Initializable, MainControllerA
                 clearFields();
                 fueInscrito = true;
                 guardarEstado();
+                //llamar a crear docuemntacion
+                submittedDocumentDao.register(success);
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");

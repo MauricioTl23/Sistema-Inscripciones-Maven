@@ -3,11 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
-
-/**
- *
- * @author mauricioteranlimari
- */
 public class Documentation {
     
     private int idtipo_documento;
@@ -50,5 +45,5 @@ public class Documentation {
     public void setCartacompromiso(boolean cartacompromiso) {
         this.cartacompromiso = cartacompromiso;
     }
-    
+
 }

@@ -15,19 +15,15 @@ import model.Database;
 import model.Enrollment;
 import model.Extras;
 
-/**
- *
- * @author mauricioteranlimari
- */
 public class EnrollementDao {
     
     private Database dbConnection;
 
     public EnrollementDao() throws ClassNotFoundException, SQLException {
-        this.dbConnection = dbConnection;
+        this.dbConnection = new Database();
     }
     
-    public boolean register(Enrollment inscripcion) {
+    public int register(Enrollment inscripcion) {
         try {
             String sql = "INSERT INTO inscripcion (id_estudiante, id_curso, id_usuario, fecha_inscripcion, gestion, estado, rude, observacion) "
                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -44,15 +40,22 @@ public class EnrollementDao {
             stmt.setInt(7, inscripcion.getRude());
             stmt.setString(8, inscripcion.getObservacion());
 
-            stmt.executeUpdate();
-            stmt.close();
+            int affectedRows = stmt.executeUpdate();
 
-            return true;
+                if (affectedRows > 0) {
+                    try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            return generatedKeys.getInt(1); // Retorna el ID generado
+                        }
+                    }
+                }
+
+                return -1;
 
         } catch (SQLException e) {
             Extras.showAlert("Error", "Ocurrió un error al registrar la inscripción.\n" + e.getMessage(), Alert.AlertType.ERROR);
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
 
@@ -91,6 +94,31 @@ public class EnrollementDao {
 
         return lista;
     }
+    
+    public int getByIdStudent(int idStudent) {
+        int idInscripcion = -1;
+        try {
+            String sql = "SELECT * FROM inscripcion WHERE id_estudiante = ? ORDER BY fecha_inscripcion DESC LIMIT 1";
+            Connection connection = dbConnection.getConnection();
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, idStudent); // Falta este set
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                idInscripcion = rs.getInt("idinscripcion");
+            }
+
+            rs.close();
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return idInscripcion;
+    }
+
 
     public boolean edit(Enrollment i) {
         try {

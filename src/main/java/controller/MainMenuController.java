@@ -31,11 +31,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.Extras;
 import model.User;
-
-/**
- *
- * @author mauricioteranlimari
- */
 public class MainMenuController implements Initializable {
     
     @FXML
@@ -199,7 +194,10 @@ public class MainMenuController implements Initializable {
 
             Object controller = loader.getController();
             System.out.println("Controlador cargado: " + controller);
-            
+            // Verificar si el controlador implementa MainControllerAware
+            if (controller instanceof MainControllerAware mainControllerAware) {
+                mainControllerAware.setMainController(this);
+            }
             boolean canLoad = true;
 
             if (controller instanceof DataReceiver dataReceiver) {
