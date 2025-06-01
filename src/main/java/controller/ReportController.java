@@ -11,8 +11,12 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import interfaces.MainControllerAware;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 
 /**
  *
@@ -33,19 +37,43 @@ public class ReportController implements Initializable, MainControllerAware {
     private Button btnNotifications;
 
     @FXML
-    private ImageView imgStudents;
+    private Rectangle rectangle1;
 
     @FXML
-    private ImageView imgUsers;
+    private Rectangle rectangle2;
 
     @FXML
-    private ImageView imgCourse;
+    private Rectangle rectangle3;
 
     @FXML
-    private ImageView imgNotify;
+    private StackPane stack1;
 
     @FXML
-    private ImageView imgNotifications;
+    private StackPane stack2;
+
+    @FXML
+    private StackPane stack3;
+
+    @FXML
+    private HBox MainHBox;
+
+    @FXML
+    private ImageView IAcademic1;
+
+    @FXML
+    private ImageView IAcademic2;
+
+    @FXML
+    private ImageView IAdministrative1;
+
+    @FXML
+    private ImageView IAdministrative2;
+
+    @FXML
+    private ImageView INotify1;
+
+    @FXML
+    private ImageView INotify2;
 
     private MainMenuController mainController;
 
@@ -53,13 +81,43 @@ public class ReportController implements Initializable, MainControllerAware {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        /*
-        imgStudents.setImage(new Image(getClass().getResourceAsStream("/resources/icons/student.gif")));
-        imgUsers.setImage(new Image(getClass().getResourceAsStream("/resources/icons/user.gif")));
-        imgCourse.setImage(new Image(getClass().getResourceAsStream("/resources/icons/course.gif")));
-        imgNotify.setImage(new Image(getClass().getResourceAsStream("/resources/icons/notify.gif")));
-        imgNotifications.setImage(new Image(getClass().getResourceAsStream("/resources/icons/notification.gif")));
-         */
+
+        stack1.prefWidthProperty().bind(MainHBox.widthProperty().multiply(1.0 / 3.0));
+        stack2.prefWidthProperty().bind(MainHBox.widthProperty().multiply(1.0 / 3.0));
+        stack3.prefWidthProperty().bind(MainHBox.widthProperty().multiply(1.0 / 3.0));
+
+        stack1.prefHeightProperty().bind(MainHBox.heightProperty());
+        stack2.prefHeightProperty().bind(MainHBox.heightProperty());
+        stack3.prefHeightProperty().bind(MainHBox.heightProperty());
+
+        rectangle1.widthProperty().bind(stack1.widthProperty());
+        rectangle1.heightProperty().bind(stack1.heightProperty());
+
+        rectangle2.widthProperty().bind(stack2.widthProperty());
+        rectangle2.heightProperty().bind(stack2.heightProperty());
+
+        rectangle3.widthProperty().bind(stack3.widthProperty());
+        rectangle3.heightProperty().bind(stack3.heightProperty());
+
+        //Imagenes
+        Image icon1Acad = new Image(getClass().getResourceAsStream("/icons/ListStudents.gif"));
+        IAcademic1.setImage(icon1Acad);
+        
+        Image icon2Acad = new Image(getClass().getResourceAsStream("/icons/ReportStudents.gif"));
+        IAcademic2.setImage(icon2Acad);
+        
+        Image icon1Admin = new Image(getClass().getResourceAsStream("/icons/ListUsers.gif"));
+        IAdministrative1.setImage(icon1Admin);
+        
+        Image icon2Admin = new Image(getClass().getResourceAsStream("/icons/ReportUsers.gif"));
+        IAdministrative2.setImage(icon2Admin);
+        
+        Image icon1Not = new Image(getClass().getResourceAsStream("/icons/NotifySystem.gif"));
+        INotify1.setImage(icon1Not);
+        
+        Image icon2Not = new Image(getClass().getResourceAsStream("/icons/NotifyPPFF.gif"));
+        INotify2.setImage(icon2Not);
+
         // Asociar páginas
         pageMap.put("Usuarios", "RUsers");
         pageMap.put("Curso", "RCourses");

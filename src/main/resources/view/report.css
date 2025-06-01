@@ -25,12 +25,6 @@ VBox {
 }
 
 /* Imagen que se adapta */
-ImageView {
-    -fx-preserve-ratio: true;
-    -fx-smooth: true;
-    -fx-fit-width: 100%;
-    -fx-fit-height: 150px;
-}
 
 /* Botones adaptables */
 Button {
