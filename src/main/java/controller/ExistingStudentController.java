@@ -51,6 +51,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import model.Enrollment;
 import Dao.SubmittedDocumentDao;
 
@@ -96,6 +99,33 @@ public class ExistingStudentController implements Initializable, MainControllerA
     private TextField TextRelacion;
     @FXML
     private TextField TextRelacion1;
+    
+    @FXML
+    private Rectangle rectangle1;
+
+    @FXML
+    private Rectangle rectangle2;
+
+    @FXML
+    private Rectangle rectangle3;
+
+    @FXML
+    private Rectangle rectangle4;
+    
+    @FXML
+    private StackPane stack1;
+
+    @FXML
+    private StackPane stack2;
+
+    @FXML
+    private StackPane stack3;
+
+    @FXML
+    private StackPane stack4;
+    
+    @FXML
+    private HBox MainHBox;
 
     private StudentDao studentdao;
     private GuardianDao guardianDao;
@@ -188,6 +218,29 @@ public class ExistingStudentController implements Initializable, MainControllerA
         });
         btnDocumentacion.setVisible(false);
         btnTutorNuevo.setOnAction(e -> navigateTo("Nuevo Tutor", "Guardian"));
+        stack1.prefWidthProperty().bind(MainHBox.widthProperty().multiply(1.0 / 2.0));
+        stack2.prefWidthProperty().bind(MainHBox.widthProperty().multiply(1.0 / 2.0));
+        stack3.prefWidthProperty().bind(MainHBox.widthProperty().multiply(1.0 / 2.0));
+        stack4.prefWidthProperty().bind(MainHBox.widthProperty().multiply(1.0 / 2.0));
+        
+        stack1.prefHeightProperty().bind(MainHBox.heightProperty().multiply(3.5 / 10.0));
+        stack2.prefHeightProperty().bind(MainHBox.heightProperty().multiply(5.0 / 10.0));
+        stack3.prefHeightProperty().bind(MainHBox.heightProperty().multiply(1.5 / 10.0));
+        stack4.prefHeightProperty().bind(MainHBox.heightProperty());
+
+        rectangle1.widthProperty().bind(stack1.widthProperty());
+        rectangle1.heightProperty().bind(stack1.heightProperty());
+
+        rectangle2.widthProperty().bind(stack2.widthProperty());
+        rectangle2.heightProperty().bind(stack2.heightProperty());
+        
+        rectangle3.widthProperty().bind(stack3.widthProperty());
+        rectangle3.heightProperty().bind(stack3.heightProperty());
+        
+        rectangle4.widthProperty().bind(stack4.widthProperty());
+        rectangle4.heightProperty().bind(stack4.heightProperty());
+        
+        
 
         try {
             this.guardianDao = new GuardianDao();
@@ -553,7 +606,7 @@ public class ExistingStudentController implements Initializable, MainControllerA
 
         //Para verificar si se puede guardar en la base de datos
         int idStudent = this.studentdao.register(estudiante);
-        
+
         System.out.println("Id estudiante " + idStudent + " id tutor " + idtutor1 + "Relacion " + TextRelacion.getText());
 
         boolean rsp = this.student_GuardianDao.register(idtutor1, idStudent, TextRelacion.getText());

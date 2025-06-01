@@ -32,7 +32,7 @@ import javafx.stage.Stage;
 import model.Extras;
 import model.User;
 public class MainMenuController implements Initializable {
-    
+
     @FXML
     private AnchorPane contentPane;
     @FXML
@@ -97,8 +97,8 @@ public class MainMenuController implements Initializable {
     }
 
     public void setSubController(Object subController) {
-        if (subController instanceof MainControllerAware) {
-            ((MainControllerAware) subController).setMainController(this);
+        if (subController instanceof MainControllerAware mainControllerAware) {
+            mainControllerAware.setMainController(this);
         }
     }
 
@@ -214,7 +214,7 @@ public class MainMenuController implements Initializable {
             }
 
             if (canLoad) {
-                
+
                 contentPane.getChildren().clear();
                 contentPane.getChildren().add(root);
 
@@ -248,5 +248,5 @@ public class MainMenuController implements Initializable {
         updateBreadcrumb();
 
     }
-    
+
 }

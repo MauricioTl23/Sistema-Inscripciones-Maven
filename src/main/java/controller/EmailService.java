@@ -13,6 +13,7 @@ import java.util.Properties;
  * @author mauricioteranlimari
  */
 public class EmailService {
+    
     private final String fromEmail = "jorgeoblit6@gmail.com";
     private final String password = "aikyobfzsgoxflcd";
 

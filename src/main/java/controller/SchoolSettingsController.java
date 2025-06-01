@@ -37,6 +37,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import model.Advisor;
 import model.Course;
 import model.Documentation;
@@ -48,6 +51,9 @@ import model.Subject_course;
  * @author mauricioteranlimari
  */
 public class SchoolSettingsController implements Initializable {
+    
+    @FXML
+    private VBox MainVBox;
 
     @FXML
     private ComboBox<String> CboxGradeCourse;
@@ -120,6 +126,30 @@ public class SchoolSettingsController implements Initializable {
 
     @FXML
     private TextField textBparallel;
+    
+    @FXML
+    private Rectangle Rectangle1;
+
+    @FXML
+    private Rectangle Rectangle2;
+
+    @FXML
+    private Rectangle Rectangle3;
+
+    @FXML
+    private Rectangle Rectangle4;
+    
+     @FXML
+    private StackPane stack1;
+
+    @FXML
+    private StackPane stack2;
+
+    @FXML
+    private StackPane stack3;
+
+    @FXML
+    private StackPane stack4;
 
     private CourseDao coursedao;
     private UserDao userdao;
@@ -1035,6 +1065,28 @@ public class SchoolSettingsController implements Initializable {
     //Metodo Initialize
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        stack1.prefHeightProperty().bind(MainVBox.heightProperty().multiply(1.0 / 10.0));
+        stack2.prefHeightProperty().bind(MainVBox.heightProperty().multiply(4.0 / 10.0));
+        stack3.prefHeightProperty().bind(MainVBox.heightProperty().multiply(4.0 / 10.0));
+        stack4.prefHeightProperty().bind(MainVBox.heightProperty().multiply(1.0 / 10.0));
+        
+        stack1.prefWidthProperty().bind(MainVBox.widthProperty());
+        stack2.prefWidthProperty().bind(MainVBox.widthProperty());
+        stack3.prefWidthProperty().bind(MainVBox.widthProperty());
+        stack4.prefWidthProperty().bind(MainVBox.widthProperty());
+        
+        Rectangle1.widthProperty().bind(stack1.widthProperty());
+        Rectangle1.heightProperty().bind(stack1.heightProperty());
+
+        Rectangle2.widthProperty().bind(stack2.widthProperty());
+        Rectangle2.heightProperty().bind(stack2.heightProperty());
+        
+        Rectangle3.widthProperty().bind(stack3.widthProperty());
+        Rectangle3.heightProperty().bind(stack3.heightProperty());
+        
+        Rectangle4.widthProperty().bind(stack4.widthProperty());
+        Rectangle4.heightProperty().bind(stack4.heightProperty());
 
         diseble();
 

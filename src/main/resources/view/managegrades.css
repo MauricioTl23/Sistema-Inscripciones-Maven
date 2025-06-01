@@ -13,23 +13,25 @@
 
 /* Estilo de los botones */
 Button {
-    -fx-background-color: #2e7d32;
-    -fx-text-fill: white;
+    -fx-background-color: white;
+    -fx-text-fill: #388e3c;
     -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI";
     -fx-font-weight: bold;
-    -fx-padding: 10px;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
     -fx-cursor: hand;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
 }
 
+
 Button:hover {
-    -fx-background-color: #1b5e20;
+    -fx-background-color: #66bb6a;
 }
 
 Button:pressed {
-    -fx-background-color: #0d3d14;
+    -fx-background-color: #388e3c;
 }
 
 /* Estilo del GridPane */

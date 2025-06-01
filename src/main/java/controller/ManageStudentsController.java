@@ -10,6 +10,7 @@ import java.util.List;
 import javafx.collections.transformation.FilteredList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
+import javafx.scene.shape.Rectangle;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,6 +42,8 @@ import javafx.stage.StageStyle;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.io.InputStream;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 /**
  *
@@ -54,6 +57,21 @@ public class ManageStudentsController implements Initializable, MainControllerAw
     private TableView<Student> TblStudent;
     @FXML
     private TextField TextSearch;
+    
+    @FXML
+    private VBox MainVBox;
+    
+    @FXML
+    private Rectangle rectangle1;
+
+    @FXML
+    private Rectangle rectangle2;
+
+    @FXML
+    private StackPane stack1;
+
+    @FXML
+    private StackPane stack2;
 
     private StudentDao studentDao;
     private GuardianDao guardianDao;
@@ -75,6 +93,20 @@ public class ManageStudentsController implements Initializable, MainControllerAw
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        
+        stack1.prefHeightProperty().bind(MainVBox.heightProperty().multiply(1.5 / 10.0));
+        stack2.prefHeightProperty().bind(MainVBox.heightProperty().multiply(8.5 / 10.0));
+
+        stack1.prefWidthProperty().bind(MainVBox.widthProperty());
+        stack2.prefWidthProperty().bind(MainVBox.widthProperty());
+
+        rectangle1.widthProperty().bind(stack1.widthProperty());
+        rectangle1.heightProperty().bind(stack1.heightProperty());
+
+        rectangle2.widthProperty().bind(stack2.widthProperty());
+        rectangle2.heightProperty().bind(stack2.heightProperty());
+        
         btnEstudianteNuevo.setOnAction(e -> navigateTo("Estudiante Nuevo", "ExistingStudent"));
         try {
             this.studentDao = new StudentDao();

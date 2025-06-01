@@ -44,4 +44,9 @@ public class StudentNotes {
         return notasPorMateria.getOrDefault(materia, new SimpleStringProperty(""));
     }
     
+    public String getNota(String materia) {
+    SimpleStringProperty notaProp = notasPorMateria.get(materia);
+    return (notaProp == null) ? "" : notaProp.get();
+}
+    
 }
