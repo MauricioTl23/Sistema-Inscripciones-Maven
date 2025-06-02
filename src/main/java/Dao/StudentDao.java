@@ -345,7 +345,7 @@ public class StudentDao {
             }
 
         } catch (SQLException e) {
-            
+
             System.err.println("Ocurrio un error al buscar curso");
             System.err.println("Mensaje del error: " + e.getMessage());
             System.err.println("Detalle del error: ");
@@ -353,6 +353,35 @@ public class StudentDao {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public ObservableList<String> parallels() {
+        ObservableList<String> paralelos = FXCollections.observableArrayList();
+        try {
+            String SQL = "SELECT paralelo "
+                    + "FROM curso "
+                    + "GROUP BY paralelo "
+                    + "ORDER BY paralelo ASC ";
+
+            Connection connection = this.StudentConnection.getConnection();
+            PreparedStatement sentence = connection.prepareStatement(SQL);
+            
+            ResultSet data = sentence.executeQuery();
+            
+            while (data.next()) {
+                String paralelo = data.getString("paralelo");
+                paralelos.add(paralelo);
+            }
+
+        } catch (Exception e) {
+            
+            System.err.println("Ocurrio un error al listar paralelos");
+            System.err.println("Mensaje del error: " + e.getMessage());
+            System.err.println("Detalle del error: ");
+
+            e.printStackTrace();
+        }
+        return paralelos;
     }
 
 }

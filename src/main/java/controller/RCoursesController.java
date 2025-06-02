@@ -185,8 +185,7 @@ public class RCoursesController implements Initializable {
         CboGrado.setItems(gradoItems);
         CboGrado.setValue("Seleccione");
 
-        String[] paralelos = {"A", "B", "C", "D", "E", "F"};
-        ObservableList<String> paraleloItems = FXCollections.observableArrayList(paralelos);
+        ObservableList<String> paraleloItems = studentDao.parallels();
         CboParalelo.setItems(paraleloItems);
         CboParalelo.setValue("Seleccione");
 
