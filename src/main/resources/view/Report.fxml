@@ -66,9 +66,9 @@
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" VBox.vgrow="ALWAYS">
                                     <children>
                                         <ImageView fx:id="IAcademic2" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS" />
-                                        <Button mnemonicParsing="false" text="DOCUMENTOS" />
+                                        <Button fx:id="BtnReportPDF" mnemonicParsing="false" text="DOCUMENTOS" />
                                         <ImageView fx:id="IAdministrative2" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS" />
-                                        <Button mnemonicParsing="false" text="ESTADISTICAS" />
+                                        <Button fx:id="BtnStatistics" mnemonicParsing="false" text="ESTADISTICAS" />
                                     </children>
                                     <VBox.margin>
                                         <Insets bottom="15.0" left="25.0" right="25.0" top="15.0" />

@@ -74,6 +74,12 @@ public class ReportController implements Initializable, MainControllerAware {
 
     @FXML
     private ImageView INotify2;
+    
+    @FXML
+    private Button BtnReportPDF;
+
+    @FXML
+    private Button BtnStatistics;
 
     private MainMenuController mainController;
 
@@ -123,12 +129,16 @@ public class ReportController implements Initializable, MainControllerAware {
         pageMap.put("Curso", "RCourses");
         pageMap.put("Notificar", "Notify");
         pageMap.put("Notificaciones", "Notifications");
+        pageMap.put("ReportesPDF", "ReportPDF");
+        pageMap.put("Estadisticas", "Statistics");
 
         // Asignar eventos a botones
         btnUsers.setOnAction(e -> navigateTo("Usuarios"));
         btnCourse.setOnAction(e -> navigateTo("Curso"));
         btnNotify.setOnAction(e -> navigateTo("Notificar"));
         btnNotifications.setOnAction(e -> navigateTo("Notificaciones"));
+        BtnReportPDF.setOnAction(e -> navigateTo("ReportesPDF"));
+        BtnStatistics.setOnAction(e -> navigateTo("Estadisticas"));
     }
 
     private void navigateTo(String pageName) {
