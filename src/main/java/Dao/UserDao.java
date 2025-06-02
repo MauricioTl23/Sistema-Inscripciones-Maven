@@ -12,7 +12,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import model.Extras;
 
@@ -442,7 +447,7 @@ public class UserDao {
             data.close();
             sentence.close();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println("Ocurrio un error al listar email's");
             System.err.println("Mensaje del error: " + e.getMessage());
             System.err.println("Detalle del error: ");
@@ -451,6 +456,49 @@ public class UserDao {
 
         }
         return DirectorsEmails;
+    }
+
+    public ObservableList<PieChart.Data> AmountofCharges() {
+
+        ObservableList<PieChart.Data> datos = FXCollections.observableArrayList();
+        
+        Map<Integer, String> cargoMap = new HashMap<>();
+        cargoMap.put(0, "Director/a");
+        cargoMap.put(1, "Secretario/a");
+        cargoMap.put(2, "Asesor/a");
+        cargoMap.put(3, "Regente/a");
+        
+        try {
+
+            String SQL = "SELECT cargo, COUNT(cargo) as cantidad_cargos "
+                    + "FROM usuario "
+                    + "GROUP BY cargo";
+
+            Connection connection = this.UserConnection.getConnection();
+            PreparedStatement sentence = connection.prepareStatement(SQL);
+
+            ResultSet data = sentence.executeQuery();
+
+            while (data.next()) {
+                
+                int cargo = data.getInt("cargo");
+                int cantidad = data.getInt("cantidad_cargos");
+                
+                String cargoNombre = cargoMap.getOrDefault(cargo, "Desconocido");
+
+                datos.add(new PieChart.Data(cargoNombre, cantidad));
+            }
+
+        } catch (SQLException e) {
+            
+            System.err.println("Ocurrio un error al contar cargos");
+            System.err.println("Mensaje del error: " + e.getMessage());
+            System.err.println("Detalle del error: ");
+
+            e.printStackTrace();
+        }
+        
+        return datos;
     }
 
 }

@@ -23,7 +23,7 @@
                         <Rectangle fx:id="rectangle1" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="657.0" stroke="BLACK" strokeType="INSIDE" width="440.0" StackPane.alignment="CENTER" />
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="25.0">
                             <children>
-                                <Label text="ACADEMICO" VBox.vgrow="ALWAYS">
+                                <Label text="LISTAS" VBox.vgrow="ALWAYS">
                                     <VBox.margin>
                                         <Insets top="15.0" />
                                     </VBox.margin>
@@ -35,9 +35,9 @@
                                                 <Insets />
                                             </VBox.margin>
                                         </ImageView>
-                                        <Button fx:id="btnCourse" mnemonicParsing="false" prefHeight="50.0" prefWidth="178.0" text="LISTAS" />
-                                        <ImageView fx:id="IAcademic2" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS" />
-                                        <Button mnemonicParsing="false" text="REPORTES" />
+                                        <Button fx:id="btnCourse" mnemonicParsing="false" prefHeight="50.0" prefWidth="178.0" text="ESTUDIANTES" />
+                                        <ImageView fx:id="IAdministrative1" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                        <Button fx:id="btnUsers" mnemonicParsing="false" prefHeight="50.0" prefWidth="139.0" text="USUARIOS" />
                                     </children>
                                     <VBox.margin>
                                         <Insets bottom="15.0" left="25.0" right="25.0" top="15.0" />
@@ -58,17 +58,17 @@
                         <Rectangle fx:id="rectangle2" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="657.0" stroke="BLACK" strokeType="INSIDE" width="440.0" />
                         <VBox alignment="CENTER" prefHeight="622.0" prefWidth="410.0" spacing="25.0" StackPane.alignment="CENTER">
                             <children>
-                                <Label text="ADMINISTRATIVOS" VBox.vgrow="ALWAYS">
+                                <Label text="REPORTES" VBox.vgrow="ALWAYS">
                                     <VBox.margin>
                                         <Insets top="15.0" />
                                     </VBox.margin>
                                 </Label>
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" VBox.vgrow="ALWAYS">
                                     <children>
-                                        <ImageView fx:id="IAdministrative1" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS" />
-                                        <Button fx:id="btnUsers" mnemonicParsing="false" prefHeight="50.0" prefWidth="139.0" text="LISTAS" />
+                                        <ImageView fx:id="IAcademic2" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS" />
+                                        <Button mnemonicParsing="false" text="DOCUMENTOS" />
                                         <ImageView fx:id="IAdministrative2" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS" />
-                                        <Button mnemonicParsing="false" text="REPORTES" />
+                                        <Button mnemonicParsing="false" text="ESTADISTICAS" />
                                     </children>
                                     <VBox.margin>
                                         <Insets bottom="15.0" left="25.0" right="25.0" top="15.0" />
@@ -99,7 +99,7 @@
                                         <ImageView fx:id="INotify1" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                                         <Button fx:id="btnNotifications" mnemonicParsing="false" prefHeight="35.0" prefWidth="178.0" text="SISTEMA" />
                                         <ImageView fx:id="INotify2" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                        <Button fx:id="btnNotify" mnemonicParsing="false" prefHeight="50.0" prefWidth="178.0" text="PPFF" />
+                                        <Button fx:id="btnNotify" mnemonicParsing="false" prefHeight="50.0" prefWidth="178.0" text="PADRES DE FAMILIA" />
                                     </children>
                                     <VBox.margin>
                                         <Insets bottom="15.0" left="25.0" right="25.0" top="15.0" />

@@ -1,41 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RCoursesController">
+<AnchorPane id="AnchorPane" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RCoursesController">
     <stylesheets>
         <URL value="@rcourses.css" />
     </stylesheets>
    <children>
-      <VBox layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="600.0">
+      <VBox fx:id="MainVBox" alignment="CENTER" layoutX="408.0" layoutY="196.0" spacing="15.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <StackPane fx:id="stack1" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Label prefHeight="58.0" prefWidth="127.0" text="Lista de Cursos" />
-                  <Region prefHeight="100.0" prefWidth="89.0" />
-                  <Label text="Paralelo" />
-                  <ComboBox fx:id="CboParalelo" prefHeight="25.0" prefWidth="94.0" />
-                  <Label layoutX="371.0" layoutY="10.0" text="Grado" />
-                  <ComboBox fx:id="CboGrado" layoutX="414.0" layoutY="10.0" prefHeight="25.0" prefWidth="83.0" />
-                  <Label layoutX="445.0" layoutY="10.0" text="Nivel" />
-                  <ComboBox fx:id="CboNivel" layoutX="409.0" layoutY="10.0" prefHeight="25.0" prefWidth="83.0" />
+                  <Rectangle fx:id="rectangle1" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="132.0" stroke="BLACK" strokeType="INSIDE" width="1388.0" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="581.0" spacing="15.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="132.0" prefWidth="643.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label fx:id="Tittle1" text="LISTA DE CURSOS" HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets left="50.0" />
+                           </padding>
+                        </HBox>
+                        <Label fx:id="Tittle2" text="Paralelo:" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="CboParalelo" prefHeight="25.0" prefWidth="94.0" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="Tittle3" text="Grado:" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="CboGrado" prefHeight="23.0" prefWidth="117.0" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="Tittle4" text="Nivel:" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="CboNivel" prefHeight="26.0" prefWidth="117.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
+                  </HBox>
                </children>
-            </HBox>
-            <TableView fx:id="TblStudent" prefHeight="200.0" prefWidth="200.0" />
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            </StackPane>
+            <StackPane fx:id="stack2" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Region prefHeight="100.0" prefWidth="494.0" />
-                  <Button fx:id="btnExport" mnemonicParsing="false" onAction="#Export" text="Exportar" />
+                  <Rectangle fx:id="rectangle2" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="657.0" stroke="BLACK" strokeType="INSIDE" width="1389.0" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="905.0" spacing="100.0">
+                     <children>
+                        <TableView fx:id="TblStudent" prefWidth="645.0" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets bottom="25.0" left="25.0" top="25.0" />
+                           </HBox.margin>
+                        </TableView>
+                        <PieChart fx:id="PieChartCourses" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets bottom="25.0" right="25.0" top="25.0" />
+                           </HBox.margin>
+                        </PieChart>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
+            </StackPane>
+            <StackPane fx:id="stack3" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Rectangle fx:id="rectangle3" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="168.0" stroke="BLACK" strokeType="INSIDE" width="1394.0" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="btnExport" mnemonicParsing="false" onAction="#Export" text="EXPORTAR" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets bottom="15.0" top="15.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </HBox>
+               </children>
+            </StackPane>
          </children>
       </VBox>
    </children>
