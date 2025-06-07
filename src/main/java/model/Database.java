@@ -22,19 +22,20 @@ public class Database {
     //CONEXION LOCAL MAURICIO NO BORRAR
     //////////////////////////////////////
     private Connection connection;
-    private String user = "root";
+   
+   /*private String user = "root";
     private String password = "1793";
     private String servidor = "localhost";
     private String puerto = "3306";
     private String nombreDB = "DBJO";
 
-    /*
+    */
     private String user = "root";
     private String password = "oblitas1234";
     private String servidor = "localhost";
     private String puerto = "3306";
     private String nombreDB = "DBJO";
-    */
+    
     private String url = "jdbc:mysql://"+servidor+":"+puerto+"/"+nombreDB+"?allowPublicKeyRetrieval=true&useSSL=false";
     
     private String driver = "com.mysql.cj.jdbc.Driver";
