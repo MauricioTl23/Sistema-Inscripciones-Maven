@@ -1,14 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportPDFController">
+<AnchorPane id="AnchorPane" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportPDFController">
     <stylesheets>
-        <URL value="@/view/reportpdf.css"/>
+        <URL value="@/view/reportpdf.css" />
     </stylesheets>
+   <children>
+      <VBox fx:id="MainVBox" layoutX="-17.0" layoutY="850.0" prefHeight="990.0" prefWidth="1389.0" spacing="15.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+         <children>
+            <StackPane fx:id="stack1" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Rectangle fx:id="rectangle1" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="132.0" stroke="BLACK" strokeType="INSIDE" width="1388.0" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="973.0" spacing="10.0" StackPane.alignment="CENTER">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="61.0" prefWidth="185.0" spacing="15.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="REPORTES" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="Verdana Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="CbxReport" prefWidth="150.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="105.0" prefWidth="230.0" spacing="15.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="NIVEL" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="Verdana Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="CbxLevel" prefWidth="150.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="105.0" prefWidth="230.0" spacing="15.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="FECHA INICIO" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="Verdana Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="DatePfi" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="105.0" prefWidth="230.0" spacing="15.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="FECHA FIN" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="Verdana Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="DatePff" />
+                           </children>
+                        </VBox>
+                     </children>
+                     <StackPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="25.0" top="10.0" />
+                     </StackPane.margin>
+                  </HBox>
+               </children>
+            </StackPane>
+            <StackPane fx:id="stack2" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Rectangle fx:id="rectangle2" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="657.0" stroke="BLACK" strokeType="INSIDE" width="1389.0" />
+               </children>
+            </StackPane>
+            <StackPane fx:id="stack3" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Rectangle fx:id="rectangle3" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="168.0" stroke="BLACK" strokeType="INSIDE" width="1394.0" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" StackPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="BtnExportPDF" mnemonicParsing="false" onAction="#BtnExportPDFAction" text="EXPORTAR PDF" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
+         </children>
+      </VBox>
+   </children>
 </AnchorPane>

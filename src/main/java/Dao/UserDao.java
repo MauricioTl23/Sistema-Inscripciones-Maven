@@ -27,12 +27,11 @@ import model.Extras;
  */
 public class UserDao {
 
-    private Database UserConnection;
-    private ManageUsersController verify;
+    private final Database UserConnection;
 
     public UserDao() throws ClassNotFoundException, SQLException {
         this.UserConnection = new Database();
-        this.verify = new ManageUsersController();
+        ManageUsersController manageUsersController = new ManageUsersController();
     }
 
     public boolean register(User usuario) throws Exception {

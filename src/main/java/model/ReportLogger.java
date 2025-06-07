@@ -1,0 +1,95 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package model;
+
+import java.io.*;
+import java.nio.file.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+/**
+ *
+ * @author mauricioteranlimari
+ */
+public class ReportLogger {
+
+    private static final String FILE_NAME = "NumberReports.txt";
+    private static final String HEADER = "Número Reporte | Tipo de Reporte | Fecha Reporte";
+
+    public static void logReport(String tipoReporte) {
+        Path filePath = Paths.get(FILE_NAME);
+        int nextReportNumber = 1;
+
+        try {
+            // Crear archivo si no existe
+            if (!Files.exists(filePath)) {
+                Files.createFile(filePath);
+                Files.write(filePath, (HEADER + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+            }
+
+            // Leer la última línea válida para obtener el último número
+            try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+                String line;
+                String lastLine = null;
+                while ((line = reader.readLine()) != null) {
+                    if (!line.trim().isEmpty() && !line.trim().equals(HEADER)) {
+                        lastLine = line;
+                    }
+                }
+
+                if (lastLine != null) {
+                    String[] parts = lastLine.split("\\|");
+                    if (parts.length > 0) {
+                        try {
+                            nextReportNumber = Integer.parseInt(parts[0].trim()) + 1;
+                        } catch (NumberFormatException ignored) {
+                        }
+                    }
+                }
+            }
+
+            // Preparar nueva línea de reporte
+            String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            String newLine = String.format("%d | %s | %s", nextReportNumber, tipoReporte, date);
+
+            // Guardar en archivo
+            Files.write(filePath, (newLine + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+
+            System.out.println("Reporte guardado correctamente.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int getNextReportNumber() {
+        Path filePath = Paths.get("NumberReports.txt");
+        int nextReportNumber = 1;
+
+        try {
+            if (Files.exists(filePath)) {
+                try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+                    String line;
+                    String lastLine = null;
+                    while ((line = reader.readLine()) != null) {
+                        if (!line.trim().isEmpty() && !line.trim().equals("Número Reporte | Tipo de Reporte | Fecha Reporte")) {
+                            lastLine = line;
+                        }
+                    }
+
+                    if (lastLine != null) {
+                        String[] parts = lastLine.split("\\|");
+                        nextReportNumber = Integer.parseInt(parts[0].trim()) + 1;
+                    }
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        return nextReportNumber;
+    }
+
+}

@@ -3,5 +3,31 @@
  */
 
 .mainFxmlClass {
+    -fx-background-color: linear-gradient(to bottom, #1b5e20, #66bb6a);
+}
 
+* {
+    -fx-font-family: "Open Sans";
+}
+
+Button {
+    -fx-background-color: white;
+    -fx-text-fill: #388e3c;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
+    -fx-text-wrap: true;
+}
+
+/* Hover y pressed */
+Button:hover {
+    -fx-background-color: #1b5e20;
+}
+
+Button:pressed {
+    -fx-background-color: #0d3d14;
 }
