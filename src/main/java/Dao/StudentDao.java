@@ -11,7 +11,12 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import model.Database;
 import model.Extras;
@@ -22,16 +27,17 @@ import model.Student;
  * @author mauricioteranlimari
  */
 public class StudentDao {
-    
+
     private Database StudentConnection;
     private ManageStudentsController verify;
-    
+
     private Statement statement;
 
     public StudentDao() throws ClassNotFoundException, SQLException {
         this.StudentConnection = new Database();
         this.verify = new ManageStudentsController();
     }
+
     public int register(Student estudiante) throws Exception {
         try {
             if (isValueExists("cedula_identidad", estudiante.getCedula_identidad())) {
@@ -42,17 +48,17 @@ public class StudentDao {
                 Extras.showAlert("Error", "El correo electrónico ya está registrado.", Alert.AlertType.ERROR);
                 return -1;
             }
-         
+
             //Consulta para insertar nuevo usuario
             String SQL = "INSERT INTO estudiante (nombre, apellido,fecha_nacimiento,cedula_identidad, genero,direccion, correo)"
                     + " VALUES ( ?, ?, ?, ?, ?, ?, ?)";
 
             Connection connection = this.StudentConnection.getConnection();
 
-            try (PreparedStatement sentence = connection.prepareStatement(SQL,statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement sentence = connection.prepareStatement(SQL, statement.RETURN_GENERATED_KEYS)) {
                 sentence.setString(1, estudiante.getNombre());
                 sentence.setString(2, estudiante.getApellido());
-                sentence.setDate(3,estudiante.getFecha_nacimiento());
+                sentence.setDate(3, estudiante.getFecha_nacimiento());
                 sentence.setString(4, estudiante.getCedula_identidad());
                 sentence.setInt(5, estudiante.getGenero());
                 sentence.setString(6, estudiante.getDireccion());
@@ -80,6 +86,7 @@ public class StudentDao {
             return -1;
         }
     }
+
     public Student SearchbyId(int idBuscado) {
         Student student = null;
 
@@ -114,7 +121,6 @@ public class StudentDao {
 
         return student;
     }
-
 
     public List<Student> tolist() {
 
@@ -169,13 +175,13 @@ public class StudentDao {
 
             PreparedStatement sentence = connection.prepareStatement(SQL);
 
-                sentence.setString(1, estudiante.getNombre());
-                sentence.setString(2, estudiante.getApellido());
-                sentence.setDate(3,estudiante.getFecha_nacimiento());
-                sentence.setString(4, estudiante.getCedula_identidad());
-                sentence.setInt(5, estudiante.getGenero());
-                sentence.setString(6, estudiante.getDireccion());
-                sentence.setString(7, estudiante.getCorreo());
+            sentence.setString(1, estudiante.getNombre());
+            sentence.setString(2, estudiante.getApellido());
+            sentence.setDate(3, estudiante.getFecha_nacimiento());
+            sentence.setString(4, estudiante.getCedula_identidad());
+            sentence.setInt(5, estudiante.getGenero());
+            sentence.setString(6, estudiante.getDireccion());
+            sentence.setString(7, estudiante.getCorreo());
 
             sentence.setInt(8, estudiante.getId());
 
@@ -222,9 +228,7 @@ public class StudentDao {
             return false;
         }
     }
-    
 
-    
     private boolean isValueExists(String field, String value) {
         try {
 
@@ -242,16 +246,15 @@ public class StudentDao {
             return false;
         }
     }
-    
-    public List<Student> getEstudiantesPorGradoParaleloYNivel(int grado, String paralelo, int nivel) {
-    List<Student> lista = new ArrayList<>();
-    String sql = "SELECT e.* FROM estudiante e " +
-                 "JOIN inscripcion i ON e.idestudiante = i.id_estudiante " +
-                 "JOIN curso c ON i.id_curso = c.idcurso " +
-                 "WHERE c.grado = ? AND c.paralelo = ? AND c.nivel = ?";
 
-        try (Connection conn = this.StudentConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    public List<Student> getEstudiantesPorGradoParaleloYNivel(int grado, String paralelo, int nivel) {
+        List<Student> lista = new ArrayList<>();
+        String sql = "SELECT e.* FROM estudiante e "
+                + "JOIN inscripcion i ON e.idestudiante = i.id_estudiante "
+                + "JOIN curso c ON i.id_curso = c.idcurso "
+                + "WHERE c.grado = ? AND c.paralelo = ? AND c.nivel = ?";
+
+        try (Connection conn = this.StudentConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, grado);
             stmt.setString(2, paralelo);
@@ -277,5 +280,108 @@ public class StudentDao {
 
         return lista;
     }
-    
+
+    public ObservableList<PieChart.Data> GenericQuantity(int idcourse) {
+
+        ObservableList<PieChart.Data> datos = FXCollections.observableArrayList();
+
+        Map<Integer, String> generoMap = new HashMap<>();
+        generoMap.put(0, "Masculino");
+        generoMap.put(1, "Femenino");
+
+        try {
+            String SQL = "SELECT e.genero, COUNT(*) as cantidad "
+                    + "FROM estudiante e "
+                    + "JOIN inscripcion i ON e.idestudiante = i.id_estudiante "
+                    + "JOIN curso c ON i.id_curso = c.idcurso "
+                    + "WHERE c.idcurso = ? "
+                    + "GROUP BY e.genero;";
+
+            Connection connection = this.StudentConnection.getConnection();
+            PreparedStatement sentence = connection.prepareStatement(SQL);
+
+            sentence.setInt(1, idcourse);
+
+            ResultSet data = sentence.executeQuery();
+
+            while (data.next()) {
+
+                int genero = data.getInt("genero");
+                int cantidad = data.getInt("cantidad");
+
+                String generoNombre = generoMap.getOrDefault(genero, "Desconocido");
+
+                datos.add(new PieChart.Data(generoNombre, cantidad));
+            }
+        } catch (SQLException e) {
+
+            System.err.println("Ocurrio un error al contar generos");
+            System.err.println("Mensaje del error: " + e.getMessage());
+            System.err.println("Detalle del error: ");
+
+            e.printStackTrace();
+
+        }
+
+        return datos;
+    }
+
+    public int getCursoId(int grado, String paralelo, int nivel) {
+        try {
+            String SQL = "SELECT idcurso "
+                    + "FROM curso "
+                    + "WHERE grado = ? AND paralelo = ? AND nivel = ?";
+
+            Connection connection = this.StudentConnection.getConnection();
+            PreparedStatement sentence = connection.prepareStatement(SQL);
+
+            sentence.setInt(1, grado);
+            sentence.setString(2, paralelo);
+            sentence.setInt(3, nivel);
+
+            ResultSet data = sentence.executeQuery();
+            if (data.next()) {
+                return data.getInt("idcurso");
+            }
+
+        } catch (SQLException e) {
+
+            System.err.println("Ocurrio un error al buscar curso");
+            System.err.println("Mensaje del error: " + e.getMessage());
+            System.err.println("Detalle del error: ");
+
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public ObservableList<String> parallels() {
+        ObservableList<String> paralelos = FXCollections.observableArrayList();
+        try {
+            String SQL = "SELECT paralelo "
+                    + "FROM curso "
+                    + "GROUP BY paralelo "
+                    + "ORDER BY paralelo ASC ";
+
+            Connection connection = this.StudentConnection.getConnection();
+            PreparedStatement sentence = connection.prepareStatement(SQL);
+            
+            ResultSet data = sentence.executeQuery();
+            
+            while (data.next()) {
+                String paralelo = data.getString("paralelo");
+                paralelos.add(paralelo);
+            }
+
+        } catch (Exception e) {
+            
+            System.err.println("Ocurrio un error al listar paralelos");
+            System.err.println("Mensaje del error: " + e.getMessage());
+            System.err.println("Detalle del error: ");
+
+            e.printStackTrace();
+        }
+        return paralelos;
+    }
+
 }
