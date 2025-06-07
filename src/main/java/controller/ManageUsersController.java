@@ -45,10 +45,6 @@ import javax.crypto.spec.SecretKeySpec;
 import model.Extras;
 import model.User;
 
-/**
- *
- * @author mauricioteranlimari
- */
 public class ManageUsersController implements Initializable {
 
     @FXML
@@ -99,6 +95,7 @@ public class ManageUsersController implements Initializable {
     private ContextMenu OptionsUsers;
 
     private User selectUser;
+    private Validation validation;
 
     private FilteredList<User> filteredData;
 
@@ -137,7 +134,7 @@ public class ManageUsersController implements Initializable {
             //Cedula_Identidad
             String cicomplete;
 
-            if (civalid(TextCiUser.getText(), textcom.getText(), cbxexp.getSelectionModel().getSelectedIndex())) {
+            if (validation.civalid(TextCiUser.getText(), textcom.getText(), cbxexp.getSelectionModel().getSelectedIndex())) {
                 if (textcom.getText() == null || textcom.getText().trim().isEmpty()) {
                     cicomplete = TextCiUser.getText() + "-" + cbxexp.getSelectionModel().getSelectedItem();
                 } else {
@@ -152,7 +149,7 @@ public class ManageUsersController implements Initializable {
                 return;
             }
             //Celular, verifica si es valido
-            if (VerifyNumberUser(TextPhoneUser.getText())) {
+            if (validation.VerifyNumberUser(TextPhoneUser.getText())) {
                 usuario.setCelular(TextPhoneUser.getText());
             } else {
                 Extras.showAlert("Advertencia", "Numero de celular invalido", Alert.AlertType.WARNING);
@@ -160,7 +157,7 @@ public class ManageUsersController implements Initializable {
                 return;
             }
             //Correo, verifica si es valido
-            if (VerifyEmailUser(TextEmailUser.getText())) {
+            if (validation.VerifyEmailUser(TextEmailUser.getText())) {
                 usuario.setCorreo(TextEmailUser.getText());
             } else {
                 Extras.showAlert("Advertencia", "Formato de correo invalido", Alert.AlertType.WARNING);

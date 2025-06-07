@@ -56,6 +56,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import model.Enrollment;
 import Dao.SubmittedDocumentDao;
+import model.Extras;
 
 public class ExistingStudentController implements Initializable, MainControllerAware, DataReceiver {
 
@@ -139,6 +140,7 @@ public class ExistingStudentController implements Initializable, MainControllerA
     private ObservableList<Course> listaCursos = FXCollections.observableArrayList();
     private FilteredList<Course> filteredCursos;
     private MainMenuController mainController;
+    private Validation validation;
     private int idtutor1;
     private int idtutor2;
     private int ultimoIdRegistrado = 0;
@@ -593,16 +595,44 @@ public class ExistingStudentController implements Initializable, MainControllerA
         idtutor1 = CboTutor.getSelectionModel().getSelectedItem() != null
                 ? CboTutor.getSelectionModel().getSelectedItem().getId()
                 : idtutor1;
-        estudiante.setNombre(TextName.getText());
-        estudiante.setApellido(TextLast_name.getText());
-        estudiante.setCedula_identidad(TextCi.getText());
+        if (validation.VerifyName(TextName.getText()) && validation.VerifyName(TextLast_name.getText())) {
+                estudiante.setNombre(TextName.getText());
+                estudiante.setApellido(TextLast_name.getText());
+        } else {
+            Extras.showAlert("Advertencia", "Formato de Nombre invalido", Alert.AlertType.WARNING);
+            TextName.clear();
+            TextLast_name.clear();
+            return;
+        }
+        if (validation.ciValid(TextCi.getText())) {
+                estudiante.setCedula_identidad(TextCi.getText());
+        } else {
+            Extras.showAlert("Advertencia", "Formato de Cedula de Identidad invalido", Alert.AlertType.WARNING);
+            TextCi.clear();
+            return;
+        }
+        
         estudiante.setFecha_nacimiento(java.sql.Date.valueOf(TimeDateBirth.getValue()));
         String selectedGender = CboGender.getValue();
         ObservableList<String> items = CboGender.getItems();
         int selectedIndex = items.indexOf(selectedGender);
         estudiante.setGenero(selectedIndex);
-        estudiante.setDireccion(TextAddress.getText());
-        estudiante.setCorreo(TextEmail.getText());
+        
+        if (validation.VerifyAddress(TextAddress.getText())) {
+                estudiante.setDireccion(TextAddress.getText());
+        } else {
+            Extras.showAlert("Advertencia", "Formato de direccion invalido", Alert.AlertType.WARNING);
+            TextAddress.clear();
+            return;
+        }
+        if (validation.VerifyEmailUser(TextEmail.getText())) {
+                estudiante.setCorreo(TextEmail.getText());
+        } else {
+            Extras.showAlert("Advertencia", "Formato de correo invalido", Alert.AlertType.WARNING);
+            TextEmail.clear();
+            return;
+        }
+        
 
         //Para verificar si se puede guardar en la base de datos
         int idStudent = this.studentdao.register(estudiante);
@@ -693,14 +723,6 @@ public class ExistingStudentController implements Initializable, MainControllerA
         CboTutor1.getSelectionModel().clearSelection();
         TextRelacion.clear();
         TextRelacion1.clear();
-    }
-
-    private static final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-
-    public static boolean VerifyEmailUser(String email) {
-        Pattern pattern = Pattern.compile(EMAIL_REGEX);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 
     public void selectTutor1ById(int idTutor) {

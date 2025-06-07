@@ -34,10 +34,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import model.Extras;
 
-/**
- *
- * @author mauricioteranlimari
- */
 public class GuardianController implements Initializable, MainControllerAware, DataReceiver {
 
     @FXML
@@ -110,6 +106,7 @@ public class GuardianController implements Initializable, MainControllerAware, D
     private Student_Guardian r2;
 
     private MainMenuController mainController;
+    private Validation validation;
 
     @Override
     public void setMainController(MainMenuController mainController) {
@@ -191,7 +188,7 @@ public class GuardianController implements Initializable, MainControllerAware, D
         } else if (TextTelf_home.getText().isEmpty() && TextTelf_personal.getText().isEmpty() && TextTelf_work.getText().isEmpty()) {
             Extras.showAlert("Error", "Debe Llenar un telefono como minimo.", Alert.AlertType.WARNING);
             return;
-        } else if (!VerifyNumberUser(TextTelf_home.getText()) && !VerifyNumberUser(TextTelf_work.getText()) && !VerifyNumberUser(TextTelf_personal.getText())) {
+        } else if (!validation.VerifyNumberUser(TextTelf_home.getText()) && !validation.VerifyNumberUser(TextTelf_work.getText()) && !validation.VerifyNumberUser(TextTelf_personal.getText())) {
             Extras.showAlert("Error", "Numero de celular invalido", Alert.AlertType.ERROR);
             TextTelf_home.clear();
             TextTelf_work.clear();
@@ -209,31 +206,62 @@ public class GuardianController implements Initializable, MainControllerAware, D
             Guardian tutor = new Guardian();
             Guardian tutor1 = new Guardian();
             String Relacion2 = null;
-            tutor.setNombre(TextName.getText());
-            tutor.setApellido(TextLast_name.getText());
-            tutor.setCedula_identidad(TextCi.getText());
-            if (VerifyEmailUser(TextEmail.getText())) {
+            if (validation.VerifyName(TextName.getText()) && validation.VerifyName(TextLast_name.getText())) {
+                tutor.setNombre(TextName.getText());
+                tutor.setApellido(TextLast_name.getText());
+            } else {
+                Extras.showAlert("Error", "Formato de nombre invalido", Alert.AlertType.ERROR);
+                TextName.clear();
+                TextLast_name.clear();
+            }
+            if (validation.ciValid(TextEmail.getText())) {
+                tutor.setCedula_identidad(TextCi.getText());
+            } else {
+                Extras.showAlert("Error", "Formato de cedula de identidad invalido", Alert.AlertType.ERROR);
+                TextCi.clear();
+            }
+            
+            if (validation.VerifyEmailUser(TextEmail.getText())) {
                 tutor.setCorreo(TextEmail.getText());
             } else {
                 Extras.showAlert("Error", "Formato de correo invalido", Alert.AlertType.ERROR);
                 TextEmail.clear();
             }
-
-            String Relacion1 = TextRelacion.getText();
+            String Relacion1="Padre";
+            if (validation.VerifyName(TextRelacion1.getText())) {
+                Relacion1 = TextRelacion.getText();
+            } else {
+                Extras.showAlert("Error", "Formato de relacion invalido", Alert.AlertType.ERROR);
+                TextEmail1.clear();
+            }
             //Segundo Tutor
             if (tutor2) {
-
-                tutor1.setNombre(TextName1.getText());
-                tutor1.setApellido(TextLast_name1.getText());
-                tutor1.setCedula_identidad(TextCi1.getText());
-                if (VerifyEmailUser(TextEmail1.getText())) {
+                if (validation.VerifyName(TextName1.getText()) && validation.VerifyName(TextLast_name1.getText())) {
+                    tutor1.setNombre(TextName1.getText());
+                    tutor1.setApellido(TextLast_name1.getText());
+                } else {
+                    Extras.showAlert("Error", "Formato de nombre invalido", Alert.AlertType.ERROR);
+                    TextName1.clear();
+                    TextLast_name1.clear();
+                }
+                if (validation.ciValid(TextEmail1.getText())) {
+                    tutor1.setCedula_identidad(TextCi1.getText());
+                } else {
+                    Extras.showAlert("Error", "Formato de cedula de identidad invalido", Alert.AlertType.ERROR);
+                    TextCi1.clear();
+                }
+                if (validation.VerifyEmailUser(TextEmail1.getText())) {
                     tutor1.setCorreo(TextEmail1.getText());
                 } else {
                     Extras.showAlert("Error", "Formato de correo invalido", Alert.AlertType.ERROR);
                     TextEmail1.clear();
                 }
-
-                Relacion2 = TextRelacion.getText();
+                if (validation.VerifyName(TextRelacion1.getText())) {
+                    Relacion2 = TextRelacion1.getText();
+                } else {
+                    Extras.showAlert("Error", "Formato de relacion invalido", Alert.AlertType.ERROR);
+                    TextEmail1.clear();
+                }
             }
             try {
 
@@ -246,7 +274,7 @@ public class GuardianController implements Initializable, MainControllerAware, D
 
                     Telf_Guardian contacto;
                     if (!TextTelf_work.getText().isEmpty()) {
-                        if (VerifyNumberUser(TextTelf_work.getText())) {
+                        if (validation.VerifyNumberUser(TextTelf_work.getText())) {
                             contacto = new Telf_Guardian(tutorId1, TextTelf_work.getText(), 1); // Teléfono del trabajo                    
                             boolean rsp = this.telf_GuardianDao.register(contacto);
                             if (rsp) {
@@ -260,7 +288,7 @@ public class GuardianController implements Initializable, MainControllerAware, D
                         }
                     }
                     if (!TextTelf_home.getText().isEmpty()) {
-                        if (VerifyNumberUser(TextTelf_home.getText())) {
+                        if (validation.VerifyNumberUser(TextTelf_home.getText())) {
                             contacto = new Telf_Guardian(tutorId1, TextTelf_home.getText(), 2); // Teléfono de casa
                             boolean rsp = this.telf_GuardianDao.register(contacto);
                             if (rsp) {
@@ -274,7 +302,7 @@ public class GuardianController implements Initializable, MainControllerAware, D
                         }
                     }
                     if (!TextTelf_personal.getText().isEmpty()) {
-                        if (VerifyNumberUser(TextTelf_personal.getText())) {
+                        if (validation.VerifyNumberUser(TextTelf_personal.getText())) {
                             contacto = new Telf_Guardian(tutorId1, TextTelf_personal.getText(), 3); // Teléfono personal
                             boolean rsp = this.telf_GuardianDao.register(contacto);
                             if (rsp) {
@@ -291,7 +319,7 @@ public class GuardianController implements Initializable, MainControllerAware, D
                     if (tutorId2 > 0) {
 
                         if (!TextTelf_work1.getText().isEmpty()) {
-                            if (VerifyNumberUser(TextTelf_work1.getText())) {
+                            if (validation.VerifyNumberUser(TextTelf_work1.getText())) {
                                 contacto = new Telf_Guardian(tutorId1, TextTelf_work1.getText(), 1); // Teléfono del trabajo                    
                                 boolean rsp = this.telf_GuardianDao.register(contacto);
                                 if (rsp) {
@@ -305,7 +333,7 @@ public class GuardianController implements Initializable, MainControllerAware, D
                             }
                         }
                         if (!TextTelf_home1.getText().isEmpty()) {
-                            if (VerifyNumberUser(TextTelf_home1.getText())) {
+                            if (validation.VerifyNumberUser(TextTelf_home1.getText())) {
                                 contacto = new Telf_Guardian(tutorId1, TextTelf_home1.getText(), 2); // Teléfono de casa
                                 boolean rsp = this.telf_GuardianDao.register(contacto);
                                 if (rsp) {
@@ -319,7 +347,7 @@ public class GuardianController implements Initializable, MainControllerAware, D
                             }
                         }
                         if (!TextTelf_personal1.getText().isEmpty()) {
-                            if (VerifyNumberUser(TextTelf_personal1.getText())) {
+                            if (validation.VerifyNumberUser(TextTelf_personal1.getText())) {
                                 contacto = new Telf_Guardian(tutorId1, TextTelf_personal1.getText(), 3); // Teléfono personal
                                 boolean rsp = this.telf_GuardianDao.register(contacto);
                                 if (rsp) {
@@ -551,16 +579,5 @@ public class GuardianController implements Initializable, MainControllerAware, D
                     break;
             }
         }
-    }
-
-    public static boolean VerifyNumberUser(String number) {
-        return number != null && number.matches("\\d{8}");
-    }
-    private static final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-
-    public static boolean VerifyEmailUser(String email) {
-        Pattern pattern = Pattern.compile(EMAIL_REGEX);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 }
