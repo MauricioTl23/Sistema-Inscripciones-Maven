@@ -90,8 +90,6 @@ public class ManageStudentsController implements Initializable, MainControllerAw
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        
-        generarCarta("Hola", "Mundo");
         stack1.prefHeightProperty().bind(MainVBox.heightProperty().multiply(1.5 / 10.0));
         stack2.prefHeightProperty().bind(MainVBox.heightProperty().multiply(8.5 / 10.0));
 
