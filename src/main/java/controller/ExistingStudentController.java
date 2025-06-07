@@ -56,6 +56,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import model.Enrollment;
 import Dao.SubmittedDocumentDao;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import model.Extras;
 
 public class ExistingStudentController implements Initializable, MainControllerAware, DataReceiver {
@@ -289,60 +292,45 @@ public class ExistingStudentController implements Initializable, MainControllerA
         filteredTutores = new FilteredList<>(listaTutores, p -> true);
         CboTutor.setItems(filteredTutores);
 
-        CboTutor.getEditor().textProperty().addListener((obs, oldVal, newVal) -> {
-            final TextField editor = CboTutor.getEditor();
-            final Guardian selected = CboTutor.getSelectionModel().getSelectedItem();
+        CboTutor.setEditable(false);
+        // Acumulador de texto y temporizador
+        final StringBuilder typedText = new StringBuilder();
+        final Timeline clearTimer = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> typedText.setLength(0)));
 
-            filteredTutores.setPredicate(tutor -> {
-                if (newVal == null || newVal.isEmpty()) {
-                    return true;
+        CboTutor.setOnKeyPressed(event -> {
+            KeyCode code = event.getCode();
+
+            if (code.isLetterKey() || code.isDigitKey() || code == KeyCode.SPACE) {
+                typedText.append(event.getText().toLowerCase());
+
+                // Reiniciar el temporizador
+                clearTimer.playFromStart();
+
+                // Buscar coincidencia
+                String input = typedText.toString();
+                for (int i = 0; i < CboTutor.getItems().size(); i++) {
+                    Guardian g = CboTutor.getItems().get(i);
+                    String fullName = (g.getNombre() + " " + g.getApellido()).toLowerCase();
+
+                    if (fullName.contains(input)) {
+                        // Abrir menú desplegable si no está abierto
+                        if (!CboTutor.isShowing()) {
+                            CboTutor.show();
+                        }
+
+                        // Resaltar el ítem en la lista desplegable
+                        final int index = i;
+                        Platform.runLater(() -> CboTutor.getSelectionModel().select(index));
+                        break;
+                    }
                 }
-                String lowerCaseFilter = newVal.toLowerCase().trim();
-
-                String fullName = (tutor.getNombre() + " " + tutor.getApellido()).toLowerCase();
-                return fullName.contains(lowerCaseFilter);
-            });
-
-            if (!CboTutor.isShowing() && !newVal.isEmpty()) {
-                Platform.runLater(CboTutor::show);
-            }
-            if (selected == null || !editor.getText().equals(selected.getNombre() + " " + selected.getApellido())) {
-                CboTutor.getSelectionModel().clearSelection();
-            }
-            imprimirItemsComboBox(CboTutor);
-        });
-        CboTutor.setOnAction(event -> {
-            Guardian selectedTutor = CboTutor.getSelectionModel().getSelectedItem();
-            if (selectedTutor != null) {
-                CboTutor.setValue(selectedTutor);
-                CboTutor.getEditor().setText(CboTutor.getConverter().toString(selectedTutor));
-                CboTutor.getEditor().positionCaret(CboTutor.getEditor().getText().length());
-                CboTutor.hide();
-            }
-        });
-        CboTutor.focusedProperty().addListener((obs, oldValue, newValue) -> {
-            if (!newValue) {
-                String inputText = CboTutor.getEditor().getText();
-                Guardian match = fromText(inputText);
-                if (match != null) {
-                    CboTutor.setValue(match);
-                } else {
-                    CboTutor.getSelectionModel().clearSelection();
-                    CboTutor.getEditor().clear();
-                }
+            } else if (code == KeyCode.BACK_SPACE && typedText.length() > 0) {
+                typedText.setLength(typedText.length() - 1);
+                clearTimer.playFromStart();
             }
         });
 
-        Platform.runLater(() -> {
-            TextField editor = CboTutor.getEditor();
-            editor.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
-                if (event.getCode() == KeyCode.SPACE) {
-                    event.consume();
-                }
-            });
-        });
-
-        CboTutor1.setEditable(true);
+        CboTutor1.setEditable(false);
 
         CboTutor1.setCellFactory(param -> new ListCell<>() {
             @Override
@@ -368,64 +356,43 @@ public class ExistingStudentController implements Initializable, MainControllerA
 
         CboTutor1.setItems(filteredTutores);
 
-        CboTutor1.getEditor().textProperty().addListener((obs1, oldVal1, newVal1) -> {
-            final TextField editor1 = CboTutor1.getEditor();
-            final Guardian selected1 = CboTutor1.getSelectionModel().getSelectedItem();
+        // Acumulador de texto y temporizador para CboTutor1
+        final StringBuilder typedText1 = new StringBuilder();
+        final Timeline clearTimer1 = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> typedText1.setLength(0)));
 
-            filteredTutores.setPredicate(tutor -> {
-                if (newVal1 == null || newVal1.isEmpty()) {
-                    return true;
+        CboTutor1.setOnKeyPressed(event -> {
+            KeyCode code = event.getCode();
+
+            if (code.isLetterKey() || code.isDigitKey() || code == KeyCode.SPACE) {
+                typedText1.append(event.getText().toLowerCase());
+
+                // Reiniciar el temporizador
+                clearTimer1.playFromStart();
+
+                // Buscar coincidencia
+                String input = typedText1.toString();
+                for (int i = 0; i < CboTutor1.getItems().size(); i++) {
+                    Guardian g = CboTutor1.getItems().get(i);
+                    String fullName = (g.getNombre() + " " + g.getApellido()).toLowerCase();
+
+                    if (fullName.contains(input)) {
+                        // Abrir menú desplegable si no está abierto
+                        if (!CboTutor1.isShowing()) {
+                            CboTutor1.show();
+                        }
+
+                        // Resaltar el ítem en la lista desplegable
+                        final int index = i;
+                        Platform.runLater(() -> CboTutor1.getSelectionModel().select(index));
+                        break;
+                    }
                 }
-                String lowerCaseFilter = newVal1.toLowerCase().trim();
-
-                String fullName = (tutor.getNombre() + " " + tutor.getApellido()).toLowerCase();
-                return fullName.contains(lowerCaseFilter);
-            });
-
-            if (!CboTutor1.isShowing() && !newVal1.isEmpty()) {
-                Platform.runLater(CboTutor1::show);
-            }
-
-            if (selected1 == null || !editor1.getText().equals(selected1.getNombre() + " " + selected1.getApellido())) {
-                CboTutor1.getSelectionModel().clearSelection();
-            }
-
-            imprimirItemsComboBox(CboTutor);
-        });
-
-        CboTutor1.setOnAction(event -> {
-            Guardian selectedTutor = CboTutor1.getSelectionModel().getSelectedItem();
-            if (selectedTutor != null) {
-                CboTutor1.setValue(selectedTutor);
-                CboTutor1.getEditor().setText(CboTutor1.getConverter().toString(selectedTutor));
-                CboTutor1.getEditor().positionCaret(CboTutor1.getEditor().getText().length());
-                CboTutor1.hide();
+            } else if (code == KeyCode.BACK_SPACE && typedText1.length() > 0) {
+                typedText1.setLength(typedText1.length() - 1);
+                clearTimer1.playFromStart();
             }
         });
-
-        CboTutor1.focusedProperty().addListener((obs1, oldValue1, newValue1) -> {
-            if (!newValue1) {
-                String inputText = CboTutor1.getEditor().getText();
-                Guardian match = fromText(inputText);
-                if (match != null) {
-                    CboTutor1.setValue(match);
-                } else {
-                    CboTutor1.getSelectionModel().clearSelection();
-                    CboTutor1.getEditor().clear();
-                }
-            }
-        });
-
-        Platform.runLater(() -> {
-            TextField editor1 = CboTutor1.getEditor();
-            editor1.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
-                if (event.getCode() == KeyCode.SPACE) {
-                    event.consume();
-                }
-            });
-        });
-
-        CboCurso.setEditable(true);
+        CboCurso.setEditable(false);
 
         listaCursos.addAll(courseDao.toList());
         filteredCursos = new FilteredList<>(listaCursos, p -> true);
@@ -461,67 +428,42 @@ public class ExistingStudentController implements Initializable, MainControllerA
                         .findFirst().orElse(null);
             }
         });
+final StringBuilder typedTextCurso = new StringBuilder();
+        final Timeline clearTimerCurso = new Timeline(new KeyFrame(Duration.seconds(1.5), e -> typedTextCurso.setLength(0)));
 
-        CboCurso.getEditor().textProperty().addListener((obs, oldVal, newVal) -> {
-            final TextField editor = CboCurso.getEditor();
-            final Course selected = CboCurso.getSelectionModel().getSelectedItem();
+        CboCurso.setOnKeyPressed(event -> {
+            KeyCode code = event.getCode();
 
-            filteredCursos.setPredicate(curso -> {
-                if (newVal == null || newVal.isEmpty()) {
-                    return true;
+            if (code.isLetterKey() || code.isDigitKey() || code == KeyCode.SPACE) {
+                typedTextCurso.append(event.getText().toLowerCase());
+                clearTimerCurso.playFromStart();
+
+                String input = typedTextCurso.toString();
+
+                for (int i = 0; i < CboCurso.getItems().size(); i++) {
+                    Course curso = CboCurso.getItems().get(i);
+
+                    String display = (getNombreNivel(curso.getNivel()) + " " +
+                                      getNombreGrado(curso.getGrado()) + " " +
+                                      curso.getParalelo() + " (" +
+                                      getNombreNivel(curso.getNivel()) + ")").toLowerCase();
+
+                    if (display.contains(input)) {
+                        if (!CboCurso.isShowing()) {
+                            CboCurso.show();
+                        }
+
+                        final int index = i;
+                        Platform.runLater(() -> CboCurso.getSelectionModel().select(index));
+                        break;
+                    }
                 }
 
-                String filter = newVal.toLowerCase().trim();
-                String display = (getNombreNivel(curso.getNivel()) + " " + getNombreGrado(curso.getGrado()) + " " + curso.getParalelo()
-                        + " (" + getNombreNivel(curso.getNivel()) + ")").toLowerCase();
-                return display.contains(filter);
-            });
-
-            if (!CboCurso.isShowing() && !newVal.isEmpty()) {
-                Platform.runLater(CboCurso::show);
-            }
-
-            if (selected == null || !editor.getText().equals(CboCurso.getConverter().toString(selected))) {
-                CboCurso.getSelectionModel().clearSelection();
+            } else if (code == KeyCode.BACK_SPACE && typedTextCurso.length() > 0) {
+                typedTextCurso.setLength(typedTextCurso.length() - 1);
+                clearTimerCurso.playFromStart();
             }
         });
-
-        CboCurso.setOnAction(event -> {
-            Course selectedCourse = CboCurso.getSelectionModel().getSelectedItem();
-            if (selectedCourse != null) {
-                CboCurso.setValue(selectedCourse);
-                CboCurso.getEditor().setText(CboCurso.getConverter().toString(selectedCourse));
-                CboCurso.getEditor().positionCaret(CboCurso.getEditor().getText().length());
-                CboCurso.hide();
-            }
-        });
-
-        CboCurso.focusedProperty().addListener((obs, oldValue, newValue) -> {
-            if (!newValue) {
-                String input = CboCurso.getEditor().getText();
-                Course match = filteredCursos.stream()
-                        .filter(c -> CboCurso.getConverter().toString(c).equalsIgnoreCase(input))
-                        .findFirst()
-                        .orElse(null);
-
-                if (match != null) {
-                    CboCurso.setValue(match);
-                } else {
-                    CboCurso.getSelectionModel().clearSelection();
-                    CboCurso.getEditor().clear();
-                }
-            }
-        });
-
-        Platform.runLater(() -> {
-            TextField editor = CboCurso.getEditor();
-            editor.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-                if (event.getCode() == KeyCode.SPACE) {
-                    event.consume();
-                }
-            });
-        });
-
         cargarEstado();
         System.out.println(fueInscrito + " " + ultimoIdRegistrado);
         if (!fueInscrito) {
