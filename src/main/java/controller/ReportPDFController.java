@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -90,8 +91,8 @@ public class ReportPDFController implements Initializable {
         DatePfi.setDisable(true);
         DatePff.setDisable(true);
     }
-    
-    private void Clean(){
+
+    private void Clean() {
         CbxLevel.getSelectionModel().select("Seleccione");
         DatePff.setValue(null);
         DatePfi.setValue(null);
@@ -113,17 +114,119 @@ public class ReportPDFController implements Initializable {
             JasperReport reporte = (JasperReport) JRLoader.loadObject(getClass().getResource("/reports/ReportByCourseAndLevel.jasper"));
             JRMapCollectionDataSource dataSource = new JRMapCollectionDataSource(collection);
             Map<String, Object> parametros = new HashMap<>();
-            parametros.put("NumeroReporte", ReportLogger.getNextReportNumber());
+            parametros.put("NumeroReporte", ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()));
             parametros.put("LevelText", CbxLevel.getSelectionModel().getSelectedItem());
 
             JasperPrint print = JasperFillManager.fillReport(reporte, parametros, dataSource);
 
             String userHome = System.getProperty("user.home");
-            String outputPath = userHome + "/Desktop/DistribucionEstudiantil"+"-"+ReportLogger.getNextReportNumber()+".pdf";
+            String outputPath = userHome + "/Desktop/DistribucionEstudiantil" + "-" + ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()) + ".pdf";
 
             JasperExportManager.exportReportToPdfFile(print, outputPath);
 
             Extras.showAlert("Éxito", "PDF exportado correctamente", Alert.AlertType.INFORMATION);
+            ReportLogger.logReport(CbxReport.getSelectionModel().getSelectedItem());
+
+            try {
+                File pdfFile = new File(outputPath);
+                if (pdfFile.exists() && Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(pdfFile);
+                } else {
+                    System.out.println("No se pudo abrir el PDF automáticamente.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } catch (JRException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void generateInscripcionesGenerales() {
+
+        List<Map<String, Object>> data = reportDao.ReportTwo();
+
+        if (data.isEmpty()) {
+            Extras.showAlert("Informacion", "No hay datos para mostrar", Alert.AlertType.ERROR);
+            return;
+        }
+
+        Collection<Map<String, ?>> collection = new ArrayList<>(data);
+
+        try {
+
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(getClass().getResource("/reports/GeneralRegistrations.jasper"));
+            JRMapCollectionDataSource dataSource = new JRMapCollectionDataSource(collection);
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("NumeroReporte", ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()));
+
+            JasperPrint print = JasperFillManager.fillReport(reporte, parametros, dataSource);
+
+            String userHome = System.getProperty("user.home");
+            String outputPath = userHome + "/Desktop/InscripcionesGenerales" + "-" + ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()) + ".pdf";
+
+            JasperExportManager.exportReportToPdfFile(print, outputPath);
+
+            Extras.showAlert("Éxito", "PDF exportado correctamente", Alert.AlertType.INFORMATION);
+            ReportLogger.logReport(CbxReport.getSelectionModel().getSelectedItem());
+
+            try {
+                File pdfFile = new File(outputPath);
+                if (pdfFile.exists() && Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(pdfFile);
+                } else {
+                    System.out.println("No se pudo abrir el PDF automáticamente.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } catch (JRException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void generateInscripcionesporFechas() throws ClassNotFoundException, SQLException, IOException {
+
+        if (DatePfi.getValue() == null || DatePff.getValue() == null) {
+            Extras.showAlert("Advertencia", "Debe seleccionar fechas válidas", Alert.AlertType.WARNING);
+            return;
+        } else if (DatePfi.getValue().isAfter(DatePff.getValue())) {
+            Extras.showAlert("Advertencia", "La fecha inicio no puede ser después de la fecha fin", Alert.AlertType.WARNING);
+            return;
+        }
+
+        List<Map<String, Object>> data = reportDao.ReportThree(DatePfi.getValue().atStartOfDay(), DatePff.getValue().atStartOfDay());
+
+        String range = DatePfi.getValue().toString() + " - " + DatePff.getValue().toString();
+
+        if (data.isEmpty()) {
+            Extras.showAlert("Informacion", "No hay datos para mostrar", Alert.AlertType.ERROR);
+            return;
+        }
+
+        Collection<Map<String, ?>> collection = new ArrayList<>(data);
+
+        try {
+
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(getClass().getResource("/reports/DetailedGeneralRegistrations.jasper"));
+            JRMapCollectionDataSource dataSource = new JRMapCollectionDataSource(collection);
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("NumeroReporte", ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()));
+            parametros.put("DateRange", range);
+
+            JasperPrint print = JasperFillManager.fillReport(reporte, parametros, dataSource);
+
+            String userHome = System.getProperty("user.home");
+            String outputPath = userHome + "/Desktop/InscripcionesporFechas" + "-" + ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()) + ".pdf";
+
+            JasperExportManager.exportReportToPdfFile(print, outputPath);
+
+            Extras.showAlert("Éxito", "PDF exportado correctamente", Alert.AlertType.INFORMATION);
+            ReportLogger.logReport(CbxReport.getSelectionModel().getSelectedItem());
+
             try {
                 File pdfFile = new File(outputPath);
                 if (pdfFile.exists() && Desktop.isDesktopSupported()) {
@@ -140,8 +243,9 @@ public class ReportPDFController implements Initializable {
         }
     }
     
-    public void generateInscripcionesGenerales(){
-        List<Map<String, Object>> data = reportDao.ReportTwo();
+    private void generateCuposDisponibles() throws ClassNotFoundException, SQLException, IOException {
+
+        List<Map<String, Object>> data = reportDao.ReportFour(CbxLevel.getSelectionModel().getSelectedIndex());
 
         if (data.isEmpty()) {
             Extras.showAlert("Informacion", "No hay datos para mostrar", Alert.AlertType.ERROR);
@@ -149,22 +253,25 @@ public class ReportPDFController implements Initializable {
         }
 
         Collection<Map<String, ?>> collection = new ArrayList<>(data);
-        
+
         try {
 
-            JasperReport reporte = (JasperReport) JRLoader.loadObject(getClass().getResource("/reports/GeneralRegistrations.jasper"));
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(getClass().getResource("/reports/QuotasForTheCourses.jasper"));
             JRMapCollectionDataSource dataSource = new JRMapCollectionDataSource(collection);
             Map<String, Object> parametros = new HashMap<>();
-            parametros.put("NumeroReporte", ReportLogger.getNextReportNumber());
+            parametros.put("NumeroReporte", ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()));
+            parametros.put("LevelText", CbxLevel.getSelectionModel().getSelectedItem());
 
             JasperPrint print = JasperFillManager.fillReport(reporte, parametros, dataSource);
 
             String userHome = System.getProperty("user.home");
-            String outputPath = userHome + "/Desktop/InscripcionesGenerales"+"-"+ReportLogger.getNextReportNumber()+".pdf";
+            String outputPath = userHome + "/Desktop/CuposDisponibles" + "-" + ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()) + ".pdf";
 
             JasperExportManager.exportReportToPdfFile(print, outputPath);
 
             Extras.showAlert("Éxito", "PDF exportado correctamente", Alert.AlertType.INFORMATION);
+            ReportLogger.logReport(CbxReport.getSelectionModel().getSelectedItem());
+
             try {
                 File pdfFile = new File(outputPath);
                 if (pdfFile.exists() && Desktop.isDesktopSupported()) {
@@ -179,7 +286,6 @@ public class ReportPDFController implements Initializable {
         } catch (JRException e) {
             e.printStackTrace();
         }
-        
     }
 
     @FXML
@@ -190,16 +296,16 @@ public class ReportPDFController implements Initializable {
         switch (reportIndex) {
             case 0 -> {
                 generateDistribucionEstudiantil();
-                ReportLogger.logReport(CbxReport.getSelectionModel().getSelectedItem());
             }
-            case 1 ->{
+            case 1 -> {
                 generateInscripcionesGenerales();
-                ReportLogger.logReport(CbxReport.getSelectionModel().getSelectedItem());
             }
-            case 2 ->
-                System.out.println("Inscripciones por Fechas (pendiente)");
-            case 3 ->
-                System.out.println("Cupos de los Cursos (pendiente)");
+            case 2 -> {
+                generateInscripcionesporFechas();
+            }
+            case 3 ->{
+                generateCuposDisponibles();
+            }
             case 4 ->
                 System.out.println("Estudiantes con Documentación Pendiente (pendiente)");
             default ->
@@ -237,7 +343,7 @@ public class ReportPDFController implements Initializable {
 
         Disable();
 
-        CbxReport.setOnAction(event -> {
+        CbxReport.setOnAction((var event) -> {
             int index = CbxReport.getSelectionModel().getSelectedIndex();
 
             switch (index) {
@@ -247,7 +353,7 @@ public class ReportPDFController implements Initializable {
                     DatePfi.setDisable(true);
                     DatePff.setDisable(true);
                 }
-                case 1 ->{
+                case 1 -> {
                     Clean();
                     Disable();
                 }
@@ -257,15 +363,17 @@ public class ReportPDFController implements Initializable {
                     DatePff.setDisable(false);
                     CbxLevel.setDisable(true);
                 }
-                case 3 ->{
+                case 3 -> {
+                    Clean();
+                    CbxLevel.setDisable(false);
+                    DatePfi.setDisable(true);
+                    DatePff.setDisable(true);
+                }
+                case 4 -> {
                     Clean();
                     Disable();
                 }
-                case 4 ->{
-                    Clean();
-                    Disable();
-                }
-                default ->{
+                default -> {
                     Clean();
                     Disable();
                 }

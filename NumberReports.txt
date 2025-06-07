@@ -8,8 +8,16 @@ Número Reporte | Tipo de Reporte | Fecha Reporte
 7 | Distribución Estudiantil | 2025-06-06 21:01:46
 8 | Distribución Estudiantil | 2025-06-06 21:08:36
 9 | Distribución Estudiantil | 2025-06-06 21:12:02
-10 | Inscripciones General | 2025-06-06 21:42:52
-11 | Inscripciones General | 2025-06-06 21:52:35
-12 | Inscripciones General | 2025-06-06 21:53:36
-13 | Distribución Estudiantil | 2025-06-06 21:55:34
-14 | Inscripciones General | 2025-06-06 21:55:43
+1 | Inscripciones General | 2025-06-06 21:42:52
+2 | Inscripciones General | 2025-06-06 21:52:35
+3 | Inscripciones General | 2025-06-06 21:53:36
+10| Distribución Estudiantil | 2025-06-06 21:55:34
+4 | Inscripciones General | 2025-06-06 21:55:43
+5 | Inscripciones General | 2025-06-07 10:16:19
+11 | Distribución Estudiantil | 2025-06-07 10:16:28
+12 | Distribución Estudiantil | 2025-06-07 10:16:32
+1 | Inscripciones por Fechas | 2025-06-07 11:03:53
+2 | Inscripciones por Fechas | 2025-06-07 11:05:19
+3 | Inscripciones por Fechas | 2025-06-07 11:05:27
+4 | Inscripciones por Fechas | 2025-06-07 11:09:25
+1 | Cupos de los Cursos | 2025-06-07 11:20:36

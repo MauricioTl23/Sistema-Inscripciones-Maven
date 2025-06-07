@@ -23,28 +23,29 @@ public class ReportLogger {
         int nextReportNumber = 1;
 
         try {
-            // Crear archivo si no existe
             if (!Files.exists(filePath)) {
                 Files.createFile(filePath);
                 Files.write(filePath, (HEADER + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
             }
 
-            // Leer la última línea válida para obtener el último número
             try (BufferedReader reader = Files.newBufferedReader(filePath)) {
                 String line;
-                String lastLine = null;
-                while ((line = reader.readLine()) != null) {
+                for (line = reader.readLine(); line != null; line = reader.readLine()) {
                     if (!line.trim().isEmpty() && !line.trim().equals(HEADER)) {
-                        lastLine = line;
-                    }
-                }
+                        String[] parts = line.split("\\|");
+                        if (parts.length >= 2) {
+                            String numeroStr = parts[0].trim();
+                            String tipo = parts[1].trim();
 
-                if (lastLine != null) {
-                    String[] parts = lastLine.split("\\|");
-                    if (parts.length > 0) {
-                        try {
-                            nextReportNumber = Integer.parseInt(parts[0].trim()) + 1;
-                        } catch (NumberFormatException ignored) {
+                            if (tipo.equalsIgnoreCase(tipoReporte)) {
+                                try {
+                                    int numero = Integer.parseInt(numeroStr);
+                                    if (numero >= nextReportNumber) {
+                                        nextReportNumber = numero + 1;
+                                    }
+                                } catch (NumberFormatException ignored) {
+                                }
+                            }
                         }
                     }
                 }
@@ -64,28 +65,35 @@ public class ReportLogger {
         }
     }
 
-    public static int getNextReportNumber() {
-        Path filePath = Paths.get("NumberReports.txt");
+    public static int getNextReportNumber(String tipoReporte) {
+        Path filePath = Paths.get(FILE_NAME);
         int nextReportNumber = 1;
 
         try {
             if (Files.exists(filePath)) {
                 try (BufferedReader reader = Files.newBufferedReader(filePath)) {
                     String line;
-                    String lastLine = null;
                     while ((line = reader.readLine()) != null) {
-                        if (!line.trim().isEmpty() && !line.trim().equals("Número Reporte | Tipo de Reporte | Fecha Reporte")) {
-                            lastLine = line;
+                        if (!line.trim().isEmpty() && !line.trim().equals(HEADER)) {
+                            String[] parts = line.split("\\|");
+                            if (parts.length >= 2) {
+                                String numeroStr = parts[0].trim();
+                                String tipo = parts[1].trim();
+                                if (tipo.equalsIgnoreCase(tipoReporte)) {
+                                    try {
+                                        int numero = Integer.parseInt(numeroStr);
+                                        if (numero >= nextReportNumber) {
+                                            nextReportNumber = numero + 1;
+                                        }
+                                    } catch (NumberFormatException ignored) {
+                                    }
+                                }
+                            }
                         }
-                    }
-
-                    if (lastLine != null) {
-                        String[] parts = lastLine.split("\\|");
-                        nextReportNumber = Integer.parseInt(parts[0].trim()) + 1;
                     }
                 }
             }
-        } catch (IOException | NumberFormatException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
