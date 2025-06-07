@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,8 +103,8 @@ public class ReportsDao {
                 Map<String, Object> fila = new HashMap<>();
                 fila.put("NameUser", data.getString("usuario"));
                 fila.put("Year", data.getInt("gestion"));
-                fila.put("Student",data.getString("estudiante"));
-                fila.put("Course", grades[data.getInt("grado")]+" "+data.getString("Paralelo")+" ("+levels[data.getInt("nivel")]+")");
+                fila.put("Student", data.getString("estudiante"));
+                fila.put("Course", grades[data.getInt("grado")] + " " + data.getString("Paralelo") + " (" + levels[data.getInt("nivel")] + ")");
                 lista.add(fila);
             }
 
@@ -120,8 +121,8 @@ public class ReportsDao {
         }
         return lista;
     }
-    
-    public List<Map<String, Object>> ReportThree(LocalDateTime fi,LocalDateTime ff) {
+
+    public List<Map<String, Object>> ReportThree(LocalDateTime fi, LocalDateTime ff) {
 
         List<Map<String, Object>> lista = new ArrayList<>();
 
@@ -136,7 +137,7 @@ public class ReportsDao {
             Connection connection = this.ReportConnection.getConnection();
 
             PreparedStatement sentence = connection.prepareStatement(SQL);
-            
+
             sentence.setTimestamp(1, Timestamp.valueOf(fi));
             sentence.setTimestamp(2, Timestamp.valueOf(ff));
 
@@ -146,8 +147,8 @@ public class ReportsDao {
                 Map<String, Object> fila = new HashMap<>();
                 fila.put("NameUser", data.getString("usuario"));
                 fila.put("Year", data.getInt("gestion"));
-                fila.put("Student",data.getString("estudiante"));
-                fila.put("Course", grades[data.getInt("grado")]+" "+data.getString("Paralelo")+" ("+levels[data.getInt("nivel")]+")");
+                fila.put("Student", data.getString("estudiante"));
+                fila.put("Course", grades[data.getInt("grado")] + " " + data.getString("Paralelo") + " (" + levels[data.getInt("nivel")] + ")");
                 lista.add(fila);
             }
 
@@ -164,7 +165,7 @@ public class ReportsDao {
         }
         return lista;
     }
-    
+
     public List<Map<String, Object>> ReportFour(int level) {
 
         List<Map<String, Object>> lista = new ArrayList<>();
@@ -204,6 +205,100 @@ public class ReportsDao {
 
         } catch (SQLException e) {
             System.err.println("Ocurrio un error al listar Reporte4");
+            System.err.println("Mensaje del error: " + e.getMessage());
+            System.err.println("Detalle del error: ");
+
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public List<Map<String, Object>> ReportFive(int year) {
+
+        List<Map<String, Object>> lista = new ArrayList<>();
+
+        try {
+            String SQL = "SELECT CONCAT(e.nombre, ' ', e.apellido) AS estudiante,GROUP_CONCAT(td.nombre SEPARATOR ', ') AS documentos_pendientes,i.fecha_inscripcion "
+                    + "FROM estudiante e "
+                    + "JOIN inscripcion i ON i.id_estudiante = e.idestudiante "
+                    + "JOIN documentacion_entregada de ON i.idinscripcion = de.id_inscripcion "
+                    + "JOIN tipo_documento td ON de.id_tipodocumento = td.idtipo_documento "
+                    + "WHERE de.estado = 0 AND td.obligatorio = 1 AND i.gestion = ? "
+                    + "GROUP BY estudiante,i.fecha_inscripcion ";
+
+            Connection connection = this.ReportConnection.getConnection();
+
+            PreparedStatement sentence = connection.prepareStatement(SQL);
+
+            sentence.setInt(1, year);
+
+            ResultSet data = sentence.executeQuery();
+
+            while (data.next()) {
+                Map<String, Object> fila = new HashMap<>();
+                fila.put("Student", data.getString("estudiante"));
+                fila.put("Documents", data.getString("documentos_pendientes"));
+                fila.put("RegistrationDate", java.sql.Date.valueOf(data.getTimestamp("fecha_inscripcion").toLocalDateTime().toLocalDate()));
+                long days = ChronoUnit.DAYS.between(data.getTimestamp("fecha_inscripcion").toLocalDateTime(), LocalDateTime.now());
+                if (days > 30) {
+                    fila.put("RemainingDays", String.valueOf(days));
+                } else {
+                    fila.put("RemainingDays", "Eliminar Inscripcion");
+                }
+
+                lista.add(fila);
+            }
+
+            data.close();
+            sentence.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            System.err.println("Ocurrio un error al listar Reporte5");
+            System.err.println("Mensaje del error: " + e.getMessage());
+            System.err.println("Detalle del error: ");
+
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public List<Map<String, Object>> ReportSix(int year) {
+
+        List<Map<String, Object>> lista = new ArrayList<>();
+
+        try {
+            String SQL = "SELECT CONCAT(e.nombre,' ',e.apellido) AS estudiante,GROUP_CONCAT(CONCAT(t.nombre, ' ', t.apellido) SEPARATOR ', ') AS tutores,GROUP_CONCAT(t.correo SEPARATOR ', ') AS correos "
+                    + "FROM estudiante_tutor et "
+                    + "JOIN estudiante e ON et.id_estudiante = e.idestudiante "
+                    + "JOIN tutor t ON et.id_tutor = t.idtutor "
+                    + "JOIN inscripcion i ON i.id_estudiante = e.idestudiante "
+                    + "WHERE i.gestion = ? "
+                    + "GROUP BY e.nombre,e.apellido,t.nombre, t.apellido,t.correo";
+
+            Connection connection = this.ReportConnection.getConnection();
+
+            PreparedStatement sentence = connection.prepareStatement(SQL);
+
+            sentence.setInt(1, year);
+
+            ResultSet data = sentence.executeQuery();
+
+            while (data.next()) {
+                Map<String, Object> fila = new HashMap<>();
+                fila.put("Student", data.getString("estudiante"));
+                fila.put("Tutors", data.getString("tutores"));
+                fila.put("Mail", data.getString("correos"));
+              
+                lista.add(fila);
+            }
+
+            data.close();
+            sentence.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            System.err.println("Ocurrio un error al listar Reporte6");
             System.err.println("Mensaje del error: " + e.getMessage());
             System.err.println("Detalle del error: ");
 

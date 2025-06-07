@@ -31,3 +31,88 @@ Button:hover {
 Button:pressed {
     -fx-background-color: #0d3d14;
 }
+
+Label {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Verdana";
+}
+
+TableView {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+     -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+}
+
+/* Estilo de las columnas de la TableView */
+.table-column {
+    -fx-alignment: CENTER;
+    -fx-font-size: 14px;
+    -fx-background-color: #388e3c;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 5px;
+}
+
+/* Fondo del encabezado de las columnas con bordes redondeados */
+.table-view .column-header-background {
+    -fx-background-color: #388e3c;
+    -fx-background-radius: 15px 15px 0 0;
+}
+.table-view .table-cell {
+    -fx-font-size: 16px;    
+    -fx-text-fill: white;   
+}
+
+
+/* Texto del encabezado */
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.table-cell {
+    -fx-background-radius: 0px;
+    -fx-border-radius: 0px;
+}
+
+.table-view .column-header,
+.table-column {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.chart-title {
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.chart-pie-label {
+    -fx-font-size: 10px;
+    -fx-fill: white;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-font-size: 10px;
+    -fx-text-fill: #444;
+}
+
+/* Colores personalizados por sector */
+.default-color0.chart-pie {
+    -fx-pie-color: #4CAF50; /* verde */
+}
+.default-color1.chart-pie {
+    -fx-pie-color: #2196F3; /* azul */
+}
+.default-color2.chart-pie {
+    -fx-pie-color: #FFC107; /* amarillo */
+}
+.default-color3.chart-pie {
+    -fx-pie-color: #F44336; /* rojo */
+}

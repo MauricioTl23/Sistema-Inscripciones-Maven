@@ -19,14 +19,18 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -80,9 +84,14 @@ public class ReportPDFController implements Initializable {
     @FXML
     private ComboBox<String> CbxLevel;
 
+    @FXML
+    private PieChart PieCharReports;
+
+    @FXML
+    private TableView<String[]> TableReports;
+
     private final String[] level = {"Primaria", "Secundaria"};
-    //private final String[] grade = {"Primero", "Segundo", "Tercer", "Cuarto", "Quinto", "Sexto"};
-    private final String[] report = {"Distribución Estudiantil", "Inscripciones General", "Inscripciones por Fechas", "Cupos de los Cursos", "Estudiantes con Documentación Pendiente"};
+    private final String[] report = {"Distribución Estudiantil", "Inscripciones General", "Inscripciones por Fechas", "Cupos de los Cursos", "Estudiantes con Documentación Pendiente", "Tutores de los Estudiantes"};
 
     ReportsDao reportDao;
 
@@ -242,9 +251,13 @@ public class ReportPDFController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     private void generateCuposDisponibles() throws ClassNotFoundException, SQLException, IOException {
 
+        if (CbxLevel.getSelectionModel().getSelectedIndex() == -1) {
+            Extras.showAlert("Advertencia", "Debe Seleccionar el nivel Academico", Alert.AlertType.ERROR);
+            return;
+        }
         List<Map<String, Object>> data = reportDao.ReportFour(CbxLevel.getSelectionModel().getSelectedIndex());
 
         if (data.isEmpty()) {
@@ -288,30 +301,186 @@ public class ReportPDFController implements Initializable {
         }
     }
 
+    private void generateDocumentacionPendiente() throws ClassNotFoundException, SQLException, IOException {
+
+        List<Map<String, Object>> data = reportDao.ReportFive(LocalDateTime.now().getYear());
+
+        if (data.isEmpty()) {
+            Extras.showAlert("Informacion", "No hay datos para mostrar", Alert.AlertType.ERROR);
+            return;
+        }
+
+        Collection<Map<String, ?>> collection = new ArrayList<>(data);
+
+        try {
+
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(getClass().getResource("/reports/MissingDocumentation.jasper"));
+            JRMapCollectionDataSource dataSource = new JRMapCollectionDataSource(collection);
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("NumeroReporte", ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()));
+
+            JasperPrint print = JasperFillManager.fillReport(reporte, parametros, dataSource);
+
+            String userHome = System.getProperty("user.home");
+            String outputPath = userHome + "/Desktop/DocumentacionPendiente" + "-" + ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()) + ".pdf";
+
+            JasperExportManager.exportReportToPdfFile(print, outputPath);
+
+            Extras.showAlert("Éxito", "PDF exportado correctamente", Alert.AlertType.INFORMATION);
+            ReportLogger.logReport(CbxReport.getSelectionModel().getSelectedItem());
+
+            try {
+                File pdfFile = new File(outputPath);
+                if (pdfFile.exists() && Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(pdfFile);
+                } else {
+                    System.out.println("No se pudo abrir el PDF automáticamente.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } catch (JRException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void generateTutoresDeEstudiantes() throws ClassNotFoundException, SQLException, IOException {
+
+        List<Map<String, Object>> data = reportDao.ReportSix(LocalDateTime.now().getYear());
+
+        if (data.isEmpty()) {
+            Extras.showAlert("Informacion", "No hay datos para mostrar", Alert.AlertType.ERROR);
+            return;
+        }
+
+        Collection<Map<String, ?>> collection = new ArrayList<>(data);
+
+        try {
+
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(getClass().getResource("/reports/StudentTutors.jasper"));
+            JRMapCollectionDataSource dataSource = new JRMapCollectionDataSource(collection);
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("NumeroReporte", ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()));
+
+            JasperPrint print = JasperFillManager.fillReport(reporte, parametros, dataSource);
+
+            String userHome = System.getProperty("user.home");
+            String outputPath = userHome + "/Desktop/TutoresdeEstudiates" + "-" + ReportLogger.getNextReportNumber(CbxReport.getSelectionModel().getSelectedItem()) + ".pdf";
+
+            JasperExportManager.exportReportToPdfFile(print, outputPath);
+
+            Extras.showAlert("Éxito", "PDF exportado correctamente", Alert.AlertType.INFORMATION);
+            ReportLogger.logReport(CbxReport.getSelectionModel().getSelectedItem());
+
+            try {
+                File pdfFile = new File(outputPath);
+                if (pdfFile.exists() && Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(pdfFile);
+                } else {
+                    System.out.println("No se pudo abrir el PDF automáticamente.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } catch (JRException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     void BtnExportPDFAction(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
 
         int reportIndex = CbxReport.getSelectionModel().getSelectedIndex();
 
         switch (reportIndex) {
-            case 0 -> {
+            case 0 ->
                 generateDistribucionEstudiantil();
-            }
-            case 1 -> {
+            case 1 ->
                 generateInscripcionesGenerales();
-            }
-            case 2 -> {
+            case 2 -> 
                 generateInscripcionesporFechas();
-            }
-            case 3 ->{
+            case 3 -> 
                 generateCuposDisponibles();
-            }
-            case 4 ->
-                System.out.println("Estudiantes con Documentación Pendiente (pendiente)");
+            case 4 -> 
+                generateDocumentacionPendiente();
+            case 5 -> 
+                generateTutoresDeEstudiantes();                
             default ->
                 Extras.showAlert("Advertencia", "Debe seleccionar un Reporte Valido", Alert.AlertType.WARNING);
         }
+        LoadReports();
+    }
 
+    private void animarPieChart(PieChart pieChart) {
+
+        for (PieChart.Data data : pieChart.getData()) {
+            data.getNode().setOpacity(0);
+            data.getNode().setScaleX(0);
+            data.getNode().setScaleY(0);
+
+            javafx.animation.FadeTransition fade = new javafx.animation.FadeTransition(javafx.util.Duration.seconds(1), data.getNode());
+            fade.setFromValue(0);
+            fade.setToValue(1);
+
+            javafx.animation.ScaleTransition scale = new javafx.animation.ScaleTransition(javafx.util.Duration.seconds(1), data.getNode());
+            scale.setFromX(0);
+            scale.setFromY(0);
+            scale.setToX(1);
+            scale.setToY(1);
+
+            fade.play();
+            scale.play();
+        }
+    }
+
+    private void LoadReports() {
+        TableReports.getItems().clear();
+        TableReports.getColumns().clear();
+
+        List<String> result = ReportLogger.getMaxReportNumbersAllTypes();
+        ObservableList<String[]> data = FXCollections.observableArrayList();
+
+        for (String item : result) {
+            String[] parts = item.split(",");
+            if (parts.length >= 2) {
+                String nombre = parts[0].trim();
+                String cantidad = parts[1].trim();
+                data.add(new String[]{nombre, cantidad});
+            } else {
+                System.out.println("Línea inválida: " + item);
+            }
+        }
+
+        TableColumn<String[], String> nombreCol = new TableColumn<>("NOMBRE REPORTE");
+        nombreCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[0]));
+
+        TableColumn<String[], String> cantidadCol = new TableColumn<>("CANTIDAD DE REPORTES");
+        cantidadCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[1]));
+
+        //nombreCol.setPrefWidth(500);
+        //cantidadCol.setPrefWidth(260);
+
+        PieCharReports.getData().clear();
+        PieCharReports.setTitle("DISTRIBUCION DE LOS REPORTES");
+        PieCharReports.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        for (String[] item : data) {
+            String nombre = item[0];
+            String cantidadStr = item[1];
+            try {
+                int cantidad = Integer.parseInt(cantidadStr);
+                PieChart.Data slice = new PieChart.Data(nombre, cantidad);
+                PieCharReports.getData().add(slice);
+            } catch (NumberFormatException e) {
+                System.out.println("Cantidad inválida para el reporte '" + nombre + "': " + cantidadStr);
+            }
+        }
+        animarPieChart(PieCharReports);
+
+        TableReports.setItems(data);
+        TableReports.getColumns().addAll(nombreCol, cantidadCol);
     }
 
     @Override
@@ -342,6 +511,8 @@ public class ReportPDFController implements Initializable {
         CbxLevel.setValue("Seleccione");
 
         Disable();
+
+        LoadReports();
 
         CbxReport.setOnAction((var event) -> {
             int index = CbxReport.getSelectionModel().getSelectedIndex();
