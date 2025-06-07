@@ -4,6 +4,7 @@
  */
 package controller;
 
+import model.EmailService;
 import Dao.AdvisorDao;
 import Dao.CourseDao;
 import Dao.ListCourseDao;

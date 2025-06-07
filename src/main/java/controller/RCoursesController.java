@@ -32,6 +32,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
 import java.sql.SQLException;
+import javafx.application.Platform;
+import javafx.scene.chart.PieChart;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 /**
  *
@@ -50,13 +55,123 @@ public class RCoursesController implements Initializable {
 
     @FXML
     private TableView TblStudent;
+
+    @FXML
+    private VBox MainVBox;
+
+    @FXML
+    private Rectangle rectangle1;
+
+    @FXML
+    private Rectangle rectangle2;
+
+    @FXML
+    private Rectangle rectangle3;
+
+    @FXML
+    private StackPane stack1;
+
+    @FXML
+    private StackPane stack2;
+
+    @FXML
+    private StackPane stack3;
+
+    @FXML
+    private PieChart PieChartCourses;
+
     private StudentDao studentDao;
+
     private FilteredList<Student> filteredData;
 
     private ObservableList<Student> data;
 
+    private void animarPieChart(PieChart pieChart) {
+
+        for (PieChart.Data data : pieChart.getData()) {
+            data.getNode().setOpacity(0);
+            data.getNode().setScaleX(0);
+            data.getNode().setScaleY(0);
+
+            javafx.animation.FadeTransition fade = new javafx.animation.FadeTransition(javafx.util.Duration.seconds(1), data.getNode());
+            fade.setFromValue(0);
+            fade.setToValue(1);
+
+            javafx.animation.ScaleTransition scale = new javafx.animation.ScaleTransition(javafx.util.Duration.seconds(1), data.getNode());
+            scale.setFromX(0);
+            scale.setFromY(0);
+            scale.setToX(1);
+            scale.setToY(1);
+
+            fade.play();
+            scale.play();
+        }
+    }
+
+    private void PieChartCourse(int idCurso) {
+
+        ObservableList<PieChart.Data> chartData = studentDao.GenericQuantity(idCurso);
+
+        if (!chartData.isEmpty()) {
+            PieChartCourses.setData(chartData);
+            PieChartCourses.setTitle("DISTRIBUCION GENERO");
+            for (PieChart.Data data : PieChartCourses.getData()) {
+                String label = data.getName();
+                String color = switch (label) {
+                    case "Masculino" ->
+                        "#2196F3";
+                    case "Femenino" ->
+                        "#F48FB1";
+                    default ->
+                        "#9E9E9E";
+                };
+                data.getNode().setStyle("-fx-pie-color: " + color + ";");
+            }
+            Platform.runLater(() -> {
+                PieChartCourses.lookupAll(".chart-legend-item").forEach(legendItem -> {
+                    javafx.scene.Node symbol = legendItem.lookup(".chart-legend-item-symbol");
+                    javafx.scene.Node label = legendItem.lookup(".label");
+                    if (symbol != null && label != null) {
+                        String text = ((javafx.scene.control.Labeled) label).getText();
+                        String color = switch (text) {
+                            case "Masculino" ->
+                                "#2196F3";
+                            case "Femenino" ->
+                                "#F48FB1";
+                            default ->
+                                "#9E9E9E";
+                        };
+                        symbol.setStyle("-fx-background-color: " + color + ";");
+                    }
+                });
+            });
+            animarPieChart(PieChartCourses);
+        } else {
+            PieChartCourses.setData(FXCollections.observableArrayList());
+            PieChartCourses.setTitle("SIN DATOS PARA EL CURSO");
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        stack1.prefHeightProperty().bind(MainVBox.heightProperty().multiply(2.0 / 10.0));
+        stack2.prefHeightProperty().bind(MainVBox.heightProperty().multiply(7.0 / 10.0));
+        stack3.prefHeightProperty().bind(MainVBox.heightProperty().multiply(1.0 / 10.0));
+
+        stack1.prefWidthProperty().bind(MainVBox.widthProperty());
+        stack2.prefWidthProperty().bind(MainVBox.widthProperty());
+        stack3.prefWidthProperty().bind(MainVBox.widthProperty());
+
+        rectangle1.widthProperty().bind(stack1.widthProperty());
+        rectangle1.heightProperty().bind(stack1.heightProperty());
+
+        rectangle2.widthProperty().bind(stack2.widthProperty());
+        rectangle2.heightProperty().bind(stack2.heightProperty());
+
+        rectangle3.widthProperty().bind(stack3.widthProperty());
+        rectangle3.heightProperty().bind(stack3.heightProperty());
+
         try {
             this.studentDao = new StudentDao();
         } catch (ClassNotFoundException ex) {
@@ -70,8 +185,7 @@ public class RCoursesController implements Initializable {
         CboGrado.setItems(gradoItems);
         CboGrado.setValue("Seleccione");
 
-        String[] paralelos = {"A", "B", "C", "D", "E", "F"};
-        ObservableList<String> paraleloItems = FXCollections.observableArrayList(paralelos);
+        ObservableList<String> paraleloItems = studentDao.parallels();
         CboParalelo.setItems(paraleloItems);
         CboParalelo.setValue("Seleccione");
 
@@ -82,6 +196,8 @@ public class RCoursesController implements Initializable {
         CboGrado.valueProperty().addListener((obs, oldVal, newVal) -> verificarYFiltrar());
         CboParalelo.valueProperty().addListener((obs, oldVal, newVal) -> verificarYFiltrar());
         CboNivel.valueProperty().addListener((obs, oldVal, newVal) -> verificarYFiltrar());
+
+        Platform.runLater(() -> verificarYFiltrar());
 
     }
 
@@ -136,6 +252,7 @@ public class RCoursesController implements Initializable {
 
         TblStudent.getColumns().addAll(Namecol, Surnamecol, datecol, CIcol, gendercol, adresscol, Emailcol);
         TblStudent.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
     }
 
     private void verificarYFiltrar() {
@@ -152,6 +269,13 @@ public class RCoursesController implements Initializable {
             int nivel = indexNivel;
 
             LoadStudents(gradoNum, paralelo, nivel);
+            int idCurso = studentDao.getCursoId(gradoNum, paralelo, nivel);
+            if (idCurso != -1) {
+                PieChartCourse(idCurso);
+            } else {
+                PieChartCourses.setData(FXCollections.observableArrayList());
+                PieChartCourses.setTitle("CURSO NO ENCONTRADO");
+            }
         }
     }
 
