@@ -45,10 +45,6 @@ import java.io.InputStream;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-/**
- *
- * @author mauricioteranlimari
- */
 public class ManageStudentsController implements Initializable, MainControllerAware {
 
     @FXML
@@ -95,6 +91,7 @@ public class ManageStudentsController implements Initializable, MainControllerAw
     public void initialize(URL url, ResourceBundle rb) {
         
         
+        generarCarta("Hola", "Mundo");
         stack1.prefHeightProperty().bind(MainVBox.heightProperty().multiply(1.5 / 10.0));
         stack2.prefHeightProperty().bind(MainVBox.heightProperty().multiply(8.5 / 10.0));
 
@@ -184,6 +181,7 @@ public class ManageStudentsController implements Initializable, MainControllerAw
                     alert2.setContentText("Se elimino correctamente el usuario");
                     alert2.initStyle(StageStyle.UTILITY);
                     alert2.showAndWait();
+                    generarCarta(deleteStudent.getNombre() + " " + deleteStudent.getApellido(), deleteStudent.getCedula_identidad());
                 } else {
 
                     Alert alert2 = new Alert(Alert.AlertType.ERROR);
@@ -194,7 +192,6 @@ public class ManageStudentsController implements Initializable, MainControllerAw
                     alert2.showAndWait();
                 }
             }
-            generarCarta(deleteStudent.getNombre() + " " + deleteStudent.getApellido(), deleteStudent.getCedula_identidad());
         });
 
         TblStudent.setContextMenu(OptionsStudents);
@@ -280,16 +277,22 @@ public class ManageStudentsController implements Initializable, MainControllerAw
 
             // Logo de la unidad educativa
             try {
-                InputStream logoStream = getClass().getResourceAsStream("/resources/icons/logoC.png");
-                byte[] logoBytes = logoStream.readAllBytes(); // desde Java 9+
-                Image logo = Image.getInstance(logoBytes);
+                InputStream logoStream = getClass().getResourceAsStream("/icons/logoC.png");
+                if (logoStream != null) {
+                    byte[] logoBytes = logoStream.readAllBytes(); // desde Java 9+
+                    Image logo = Image.getInstance(logoBytes);
 
-                logo.scaleToFit(80, 80);
-                logo.setAlignment(Image.ALIGN_LEFT);
-                doc.add(logo);
+                    logo.scaleToFit(80, 80);
+                    logo.setAlignment(Image.ALIGN_LEFT);
+                    doc.add(logo);
+                } else {
+                    System.out.println("No se encontró el logo en /icons/logoC.png");
+                }
             } catch (Exception e) {
                 System.out.println("No se pudo cargar el logo. Se continúa sin imagen.");
+                e.printStackTrace();
             }
+
 
             // Nombre de la unidad educativa
             Paragraph nombreUnidad = new Paragraph("UNIDAD EDUCATIVA “JORGE OBLITAS”",
