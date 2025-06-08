@@ -8,5 +8,9 @@
 .DS_Store
 Thumbs.db
 
+# Ignorar archivo de configuración nbactions.xml
+nbactions.xml
+
+
 
 

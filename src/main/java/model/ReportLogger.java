@@ -8,6 +8,10 @@ import java.io.*;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -98,6 +102,43 @@ public class ReportLogger {
         }
 
         return nextReportNumber;
+    }
+
+    public static List<String> getMaxReportNumbersAllTypes() {
+        Path filePath = Paths.get(FILE_NAME);
+        Map<String, Integer> maxNumbersByType = new HashMap<>();
+
+        try {
+            if (Files.exists(filePath)) {
+                try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        if (!line.trim().isEmpty() && !line.trim().equals(HEADER)) {
+                            String[] parts = line.split("\\|");
+                            if (parts.length >= 2) {
+                                String numeroStr = parts[0].trim();
+                                String tipo = parts[1].trim();
+
+                                try {
+                                    int numero = Integer.parseInt(numeroStr);
+                                    maxNumbersByType.merge(tipo, numero, Math::max);
+                                } catch (NumberFormatException ignored) {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        List<String> result = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : maxNumbersByType.entrySet()) {
+            result.add(entry.getKey() + "," + entry.getValue()); // <-- tipo primero, luego número
+        }
+
+        return result;
     }
 
 }

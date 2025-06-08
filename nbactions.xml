@@ -11,6 +11,7 @@
             </goals>
             <properties>
                 <exec.vmArgs>--module-path "C:\Program Files\Java\javafx-sdk-23.0.2\lib" --add-modules javafx.controls,javafx.fxml</exec.vmArgs>
+                <exec.vmArgs>--module-path /Users/mauricioteranlimari/javafx-sdk-24.0.1/lib --add-modules javafx.controls,javafx.fxml,javafx.swing</exec.vmArgs>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.appArgs></exec.appArgs>
                 <exec.mainClass>${packageClassName}</exec.mainClass>
@@ -28,6 +29,7 @@
             </goals>
             <properties>
                 <exec.vmArgs>--module-path "C:\Program Files\Java\javafx-sdk-23.0.2\lib" --add-modules javafx.controls,javafx.fxml -agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
+                <exec.vmArgs>--module-path /Users/mauricioteranlimari/javafx-sdk-24.0.1/lib --add-modules javafx.controls,javafx.fxml,javafx.swing -agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.appArgs></exec.appArgs>
                 <exec.mainClass>${packageClassName}</exec.mainClass>
@@ -46,6 +48,7 @@
             </goals>
             <properties>
                 <exec.vmArgs>--module-path "C:\Program Files\Java\javafx-sdk-23.0.2\lib" --add-modules javafx.controls,javafx.fxml</exec.vmArgs>
+                <exec.vmArgs>--module-path /Users/mauricioteranlimari/javafx-sdk-24.0.1/lib --add-modules javafx.controls,javafx.fxml,javafx.swing</exec.vmArgs>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.mainClass>${packageClassName}</exec.mainClass>
                 <exec.executable>java</exec.executable>

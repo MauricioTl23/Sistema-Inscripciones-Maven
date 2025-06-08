@@ -14,7 +14,7 @@
 Button {
     -fx-background-color: #2e7d32;
     -fx-text-fill: white;
-    -fx-font-size: 14px;
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-padding: 8px 16px;
     -fx-border-radius: 6px;
@@ -34,11 +34,13 @@ Button:pressed {
 /* Estilo de los Labels */
 Label {
     -fx-text-fill: white;
-    -fx-font-size: 14px;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Verdana";
 }
 
 /* Estilo del TextField */
-TextField {
+TTextField {
     -fx-pref-width: 150px;
     -fx-padding: 6px;
     -fx-border-radius: 5px;

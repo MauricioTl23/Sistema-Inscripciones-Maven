@@ -1,14 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.ScatterChart?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StatisticsController">
+<AnchorPane id="AnchorPane" prefHeight="1330.0" prefWidth="1276.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StatisticsController">
     <stylesheets>
-        <URL value="@/view/statistics.css"/>
+        <URL value="@/view/statistics.css" />
     </stylesheets>
+    <children>
+        <VBox fx:id="MainVBox" layoutX="1282.0" layoutY="-90.0" spacing="5.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+            <children>
+            <StackPane fx:id="stackGral" VBox.vgrow="ALWAYS">
+               <children>
+                  <Rectangle fx:id="RectangleGral" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="60.0" stroke="BLACK" strokeType="INSIDE" width="1226.0" />
+                  <HBox alignment="CENTER_LEFT" spacing="50.0">
+                     <children>
+                                  <Label text="NIVEL" textAlignment="CENTER" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                      <font>
+                                          <Font name="System Bold" size="24.0" />
+                                      </font>
+                                  </Label>
+                                  <ComboBox fx:id="CboxLevel1" prefHeight="26.0" prefWidth="223.0" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                     </children>
+                     <StackPane.margin>
+                        <Insets left="50.0" />
+                     </StackPane.margin>
+                  </HBox>
+               </children>
+            </StackPane>
+                <HBox spacing="5.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <StackPane fx:id="stack1" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Rectangle fx:id="rectangle1" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="600.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
+                                <VBox alignment="CENTER" spacing="5.0">
+                                    <children>
+                                        <BarChart fx:id="ApprovedVSFailed" VBox.vgrow="ALWAYS">
+                                            <xAxis>
+                                                <CategoryAxis fx:id="xAxis" />
+                                            </xAxis>
+                                            <yAxis>
+                                                <NumberAxis fx:id="yAxis" />
+                                            </yAxis>
+                                            <VBox.margin>
+                                                <Insets left="25.0" right="25.0" />
+                                            </VBox.margin>
+                                        </BarChart>
+                                    </children>
+                                    <StackPane.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </StackPane.margin>
+                                </VBox>
+                            </children>
+                        </StackPane>
+                        <StackPane fx:id="stack2" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Rectangle fx:id="rectangle2" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="600.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
+                                <VBox alignment="CENTER" spacing="5.0">
+                                    <children>
+                                        <BarChart fx:id="RegistrationsByYear" VBox.vgrow="ALWAYS">
+                                            <xAxis>
+                                                <CategoryAxis fx:id="xAxis1" />
+                                            </xAxis>
+                                            <yAxis>
+                                                <NumberAxis fx:id="yAxis1" />
+                                            </yAxis>
+                                            <VBox.margin>
+                                                <Insets left="25.0" right="25.0" />
+                                            </VBox.margin>
+                                        </BarChart>
+                                    </children>
+                                    <StackPane.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </StackPane.margin>
+                                </VBox>
+                            </children>
+                        </StackPane>
+                    </children>
+                </HBox>
+                <HBox spacing="5.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <StackPane fx:id="stack3" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Rectangle fx:id="rectangle3" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="600.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
+                                <VBox alignment="CENTER" spacing="15.0">
+                                    <children>
+                                        <PieChart fx:id="DistribucionodFaildAndApproved" VBox.vgrow="ALWAYS">
+                                            <VBox.margin>
+                                                <Insets left="25.0" right="25.0" />
+                                            </VBox.margin>
+                                        </PieChart>
+                                    </children>
+                                    <StackPane.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </StackPane.margin>
+                                </VBox>
+                            </children>
+                        </StackPane>
+                        <StackPane fx:id="stack4" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Rectangle fx:id="rectangle4" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="600.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
+                                <VBox alignment="CENTER" spacing="15.0">
+                                    <children>
+                                        <ScatterChart fx:id="AgeAndFinaAverage" VBox.vgrow="ALWAYS">
+                                            <xAxis>
+                                                <NumberAxis fx:id="xAxisAge" />
+                                            </xAxis>
+                                            <yAxis>
+                                                <NumberAxis fx:id="yAxisAverage" />
+                                            </yAxis>
+                                            <VBox.margin>
+                                                <Insets left="25.0" right="25.0" />
+                                            </VBox.margin>
+                                        </ScatterChart>
+                                    </children>
+                                    <StackPane.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </StackPane.margin>
+                                </VBox>
+                            </children>
+                        </StackPane>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>

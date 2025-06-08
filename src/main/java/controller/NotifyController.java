@@ -27,6 +27,9 @@ import javafx.scene.control.ListCell;
 import javafx.scene.input.KeyCode;
 import javafx.util.StringConverter;
 import javafx.animation.PauseTransition;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 /**
@@ -37,16 +40,46 @@ public class NotifyController implements Initializable {
 
     @FXML
     private Button btnEnviar;
+
+    @FXML
+    private VBox MainVBox;
+
+    @FXML
+    private StackPane Stack1;
+
+    @FXML
+    private StackPane Stack2;
+
+    @FXML
+    private Rectangle rectangle1;
+
+    @FXML
+    private Rectangle rectangle2;
+
     @FXML
     private ComboBox<Guardian> CboTutor;
+    
     @FXML
     private TextArea TxtCarta;
+    
     private GuardianDao guardianDao;
     private ObservableList<Guardian> listaTutores = FXCollections.observableArrayList();
     private FilteredList<Guardian> filteredTutores;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        Stack1.prefHeightProperty().bind(MainVBox.heightProperty().multiply(2.0 / 10.0));
+        Stack2.prefHeightProperty().bind(MainVBox.heightProperty().multiply(8.0 / 10.0));
+        
+        Stack1.prefWidthProperty().bind(MainVBox.widthProperty());
+        Stack2.prefWidthProperty().bind(MainVBox.widthProperty());
+        
+        rectangle1.widthProperty().bind(Stack1.widthProperty());
+        rectangle1.heightProperty().bind(Stack1.heightProperty());
+
+        rectangle2.widthProperty().bind(Stack2.widthProperty());
+        rectangle2.heightProperty().bind(Stack2.heightProperty());
 
         try {
             this.guardianDao = new GuardianDao();

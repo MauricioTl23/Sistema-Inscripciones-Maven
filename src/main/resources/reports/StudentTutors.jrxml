@@ -16,65 +16,48 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="Id" class="java.lang.Integer"/>
-	<field name="Level" class="java.lang.String"/>
-	<field name="Grade" class="java.lang.String"/>
-	<field name="Parallel" class="java.lang.String"/>
-	<field name="Advisor" class="java.lang.String"/>
-	<field name="AvailableQuota" class="java.lang.Integer"/>
+	<field name="Student" class="java.lang.String"/>
+	<field name="Tutors" class="java.lang.String"/>
+	<field name="Mail" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="205" splitType="Stretch">
+		<band height="180" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
-				<reportElement x="470" y="86" width="80" height="30" uuid="f4eff34f-db2f-4da6-bba6-ed0bf8f9dd8d"/>
+				<reportElement x="470" y="105" width="80" height="30" uuid="f4eff34f-db2f-4da6-bba6-ed0bf8f9dd8d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font fontName="SansSerif" size="24" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="470" y="41" width="148" height="30" uuid="98dd2c06-9c18-4ac3-bfff-bc5f00a3d019"/>
+				<reportElement x="470" y="60" width="148" height="30" uuid="98dd2c06-9c18-4ac3-bfff-bc5f00a3d019"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font fontName="SansSerif" size="24" isBold="true"/>
 				</textElement>
 				<text><![CDATA[N° Reporte:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="470" y="131" width="70" height="29" uuid="73588493-577c-462b-999c-95521e91ed41"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="SansSerif" size="24" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Nivel:]]></text>
-			</staticText>
 			<image>
-				<reportElement x="30" y="26" width="150" height="150" uuid="5582dafc-b766-4f84-9d80-8f55cf97f701">
+				<reportElement x="20" y="15" width="150" height="150" uuid="5582dafc-b766-4f84-9d80-8f55cf97f701">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<imageExpression><![CDATA["src/main/resources/icons/logoC.png"]]></imageExpression>
 			</image>
 			<textField textAdjust="StretchHeight" pattern="MMMMM dd, yyyy">
-				<reportElement x="550" y="86" width="241" height="30" uuid="c7aebe4b-8e80-4653-85ce-8db52d9fde41"/>
+				<reportElement x="550" y="105" width="241" height="30" uuid="c7aebe4b-8e80-4653-85ce-8db52d9fde41"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font size="24"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="620" y="41" width="70" height="32" uuid="1c539ce7-5557-489f-ad9d-77fe1446deff"/>
+				<reportElement x="620" y="60" width="70" height="32" uuid="1c539ce7-5557-489f-ad9d-77fe1446deff"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font size="24"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{NumeroReporte}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="540" y="131" width="250" height="30" uuid="5b98552b-3185-463f-9eba-2e7972b5050c"/>
-				<textElement verticalAlignment="Middle" markup="none">
-					<font size="24"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{LevelText}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -88,7 +71,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font fontName="SansSerif" size="26" isBold="true"/>
 				</textElement>
-				<text><![CDATA[CUPOS DISPONIBLES]]></text>
+				<text><![CDATA[TUTORES DE ESTUDIANTES]]></text>
 			</staticText>
 			<line>
 				<reportElement x="-1" y="110" width="801" height="1" uuid="cf4d7886-201f-4947-b3b0-83464815090f"/>
@@ -96,66 +79,36 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="34" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="1" y="1" width="59" height="30" forecolor="#FFFFFF" backcolor="#457D47" uuid="4454060c-eb80-4ebf-b20f-ff91c8c3dba1"/>
+				<reportElement mode="Opaque" x="1" y="0" width="239" height="30" forecolor="#FFFFFF" backcolor="#457D47" uuid="4454060c-eb80-4ebf-b20f-ff91c8c3dba1"/>
 				<box topPadding="0">
 					<pen lineWidth="0.75"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font fontName="SansSerif" size="18" isBold="true"/>
 				</textElement>
-				<text><![CDATA[ID]]></text>
+				<text><![CDATA[ESTUDIANTE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="60" y="1" width="100" height="30" forecolor="#FFFFFF" backcolor="#457D47" uuid="3d4b4ce8-5dde-4054-acad-3aec0b870595"/>
+				<reportElement mode="Opaque" x="240" y="0" width="290" height="30" forecolor="#FFFFFF" backcolor="#457D47" uuid="3d4b4ce8-5dde-4054-acad-3aec0b870595"/>
 				<box topPadding="0">
 					<pen lineWidth="0.75"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font fontName="SansSerif" size="18" isBold="true"/>
 				</textElement>
-				<text><![CDATA[NIVEL]]></text>
+				<text><![CDATA[TUTORES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="160" y="1" width="101" height="30" forecolor="#FFFFFF" backcolor="#457D47" uuid="ada19fcc-0946-421d-a665-43293962f253"/>
+				<reportElement mode="Opaque" x="530" y="0" width="272" height="30" forecolor="#FFFFFF" backcolor="#457D47" uuid="ada19fcc-0946-421d-a665-43293962f253"/>
 				<box topPadding="0">
 					<pen lineWidth="0.75"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font fontName="SansSerif" size="18" isBold="true"/>
 				</textElement>
-				<text><![CDATA[GRADO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="261" y="1" width="110" height="30" forecolor="#FFFFFF" backcolor="#457D47" uuid="119a97af-c386-43dd-9058-a94fc254fb71"/>
-				<box topPadding="0">
-					<pen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="SansSerif" size="18" isBold="true"/>
-				</textElement>
-				<text><![CDATA[PARALELO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="371" y="1" width="246" height="30" forecolor="#FFFFFF" backcolor="#457D47" uuid="6bcb4d1a-ebfa-42a7-ab4e-eb44c0ad1481"/>
-				<box topPadding="0">
-					<pen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="SansSerif" size="18" isBold="true"/>
-				</textElement>
-				<text><![CDATA[ASESOR]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="618" y="1" width="183" height="30" forecolor="#FFFFFF" backcolor="#457D47" uuid="531d2591-388b-47fd-b6d8-8a19d178b226"/>
-				<box topPadding="0">
-					<pen lineWidth="0.75"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="SansSerif" size="18" isBold="true"/>
-				</textElement>
-				<text><![CDATA[CUPO]]></text>
+				<text><![CDATA[CORREO TUTORES]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -170,58 +123,32 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textField textAdjust="StretchHeight">
-					<reportElement x="1" y="0" width="58" height="30" uuid="775bbd7c-707d-4892-939e-ed2acb8aa90a">
+					<reportElement x="1" y="0" width="239" height="30" uuid="775bbd7c-707d-4892-939e-ed2acb8aa90a">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a60c9b77-ee3c-4e9c-b21a-a7af21712708"/>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="14"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{Id}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{Student}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement x="60" y="0" width="98" height="30" uuid="5c454270-bfd4-4c93-a734-fa0f4910c9a7">
+					<reportElement x="240" y="0" width="290" height="30" uuid="5c454270-bfd4-4c93-a734-fa0f4910c9a7">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9e16d7ba-512a-45f2-84a2-09bec8bdc32b"/>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="14"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{Level}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{Tutors}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement x="158" y="0" width="103" height="30" uuid="638d25c8-1d04-4622-9414-9fb1cf638007">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="519c06e5-1455-476c-928f-fc06f0e3b6e2"/>
-					</reportElement>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="14"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{Grade}]]></textFieldExpression>
-				</textField>
-				<textField textAdjust="StretchHeight">
-					<reportElement x="261" y="0" width="108" height="30" uuid="b0f263af-a680-42c4-a786-9d140f45a3e3">
+					<reportElement x="530" y="0" width="272" height="30" uuid="b0f263af-a680-42c4-a786-9d140f45a3e3">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c2ca4307-720e-4d22-ae9e-dc40edc858e4"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="14"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{Parallel}]]></textFieldExpression>
-				</textField>
-				<textField textAdjust="StretchHeight">
-					<reportElement x="370" y="0" width="248" height="30" uuid="09e428e6-863f-414d-9db6-37e15fbe14e5">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f854b60d-330c-4373-8d5c-b4be56c0c661"/>
-					</reportElement>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="14"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{Advisor}]]></textFieldExpression>
-				</textField>
-				<textField textAdjust="StretchHeight">
-					<reportElement x="618" y="0" width="183" height="30" uuid="66675ac7-b853-44d5-a729-3afc3d3ca912">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="160c5ccc-4f22-4130-ba0f-8dcd0434c9f2"/>
-					</reportElement>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="14"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{AvailableQuota}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{Mail}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -243,7 +170,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font size="16"/>
 				</textElement>
-				<text><![CDATA[Este reporte muestra la disponibilidad de cupos disponibles por curso y nivel para el periodo académico actual.]]></text>
+				<text><![CDATA[Este reporte muestra a los tutores de cada estudiante con su respectivo correo electronico de la gestion actual.]]></text>
 			</staticText>
 		</band>
 	</pageFooter>

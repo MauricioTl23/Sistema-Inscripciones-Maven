@@ -22,3 +22,11 @@ Número Reporte | Tipo de Reporte | Fecha Reporte
 4 | Inscripciones por Fechas | 2025-06-07 11:09:25
 1 | Cupos de los Cursos | 2025-06-07 11:20:36
 2 | Cupos de los Cursos | 2025-06-07 11:34:10
+3 | Cupos de los Cursos | 2025-06-07 11:36:01
+1 | Estudiantes con Documentación Pendiente | 2025-06-07 12:47:41
+5 | Inscripciones por Fechas | 2025-06-07 12:49:21
+2 | Estudiantes con Documentación Pendiente | 2025-06-07 12:53:47
+1 | Tutores de los Estudiantes | 2025-06-07 13:35:33
+2 | Tutores de los Estudiantes | 2025-06-07 13:36:44
+13 | Distribución Estudiantil | 2025-06-07 14:48:11
+3 | Estudiantes con Documentación Pendiente | 2025-06-07 14:53:05
