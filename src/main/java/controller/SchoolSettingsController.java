@@ -1129,40 +1129,30 @@ public class SchoolSettingsController implements Initializable {
 
         try {
             this.coursedao = new CourseDao();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SchoolSettingsController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(SchoolSettingsController.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             this.documentationdao = new DocumentationDao();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SchoolSettingsController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(SchoolSettingsController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try {
             this.scoursedao = new Subject_courseDao();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SchoolSettingsController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(SchoolSettingsController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try {
             this.userdao = new UserDao();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SchoolSettingsController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(SchoolSettingsController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try {
             this.advisordao = new AdvisorDao();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SchoolSettingsController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(SchoolSettingsController.class.getName()).log(Level.SEVERE, null, ex);
         }
 

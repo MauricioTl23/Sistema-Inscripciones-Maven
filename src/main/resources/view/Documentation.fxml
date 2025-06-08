@@ -1,32 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane id="AnchorPane" prefHeight="410.0" prefWidth="634.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DocumentationController">
+<AnchorPane id="AnchorPane" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DocumentationController">
     <stylesheets>
         <URL value="@documentation.css" />
     </stylesheets>
    <children>
-      <VBox layoutX="11.0" layoutY="14.0" prefHeight="312.0" prefWidth="613.0">
+      <VBox fx:id="MainVBox" layoutX="643.0" layoutY="335.0" spacing="15.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
          <children>
-            <Label text="Documentacion General" />
-            <TableView fx:id="TblDocuments" prefHeight="278.0" prefWidth="589.0">
-              <columns>
-                <TableColumn prefWidth="63.0" text="ID" />
-                <TableColumn prefWidth="133.0" text="Nombre" />
-                  <TableColumn prefWidth="111.0" text="Obligatorio" />
-                  <TableColumn prefWidth="121.0" text="Entregado" />
-                  <TableColumn prefWidth="158.0" text="Fecha de entrega" />
-              </columns>
-            </TableView>
+            <StackPane fx:id="Stack1" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Rectangle fx:id="rectangle1" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="657.0" stroke="BLACK" strokeType="INSIDE" width="1389.0" />
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="261.0" StackPane.alignment="CENTER">
+                     <children>
+                        <Label text="DOCUMENTACION GENERAL" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TableView fx:id="TblDocuments" prefHeight="278.0" prefWidth="589.0" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                           </VBox.margin>
+                        </TableView>
+                     </children>
+                     <StackPane.margin>
+                        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                     </StackPane.margin>
+                  </VBox>
+               </children>
+            </StackPane>
+            <StackPane fx:id="Stack2" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Rectangle fx:id="rectangle2" arcHeight="25.0" arcWidth="25.0" fill="#529e62" height="168.0" stroke="BLACK" strokeType="INSIDE" width="1394.0" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" StackPane.alignment="CENTER">
+                     <children>
+                        <Button id="BtnSave" fx:id="BtnSave" mnemonicParsing="false" onAction="#OnSave" text="GUARDAR" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets bottom="15.0" top="15.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
          </children>
       </VBox>
-      <Button fx:id="BtnSave" layoutX="267.0" layoutY="352.0" mnemonicParsing="false" onAction="#OnSave" text="Guardar" />
    </children>
 </AnchorPane>

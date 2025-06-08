@@ -1,7 +1,36 @@
-/*
- * Empty Stylesheet file.
- */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
 
+/* Estilo general del fondo con tema verde */
 .mainFxmlClass {
+    -fx-background-color: linear-gradient(to bottom, #1b5e20, #66bb6a);
+}
 
+/* Fuente global para todo el proyecto */
+* {
+    -fx-font-family: "Open Sans";
+}
+
+Label {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Verdana";
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+.chart-legend * {
+    -fx-text-fill: black;
+}
+
+.chart-plot-background {
+    -fx-background-color: white; 
+}
+
+.chart-vertical-grid-lines,
+.chart-horizontal-grid-lines {
+    -fx-stroke: black;
 }

@@ -35,6 +35,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import model.Extras;
 
 public class DocumentationController implements Initializable, MainControllerAware, DataReceiver {
@@ -42,8 +45,24 @@ public class DocumentationController implements Initializable, MainControllerAwa
     
     @FXML
     private Button BtnSave;
+    
     @FXML
     private TableView<SubmittedDocument> TblDocuments;
+    
+     @FXML
+    private VBox MainVBox;
+     
+    @FXML
+    private StackPane Stack1;
+
+    @FXML
+    private StackPane Stack2;
+    
+    @FXML
+    private Rectangle rectangle1;
+
+    @FXML
+    private Rectangle rectangle2;
     
     private SubmittedDocumentDao submittedDocumentDao;
     private DocumentationDao documentationDao;
@@ -77,6 +96,20 @@ public class DocumentationController implements Initializable, MainControllerAwa
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        Stack1.prefHeightProperty().bind(MainVBox.heightProperty().multiply(8.0 / 10.0));
+        Stack2.prefHeightProperty().bind(MainVBox.heightProperty().multiply(2.0 / 10.0));
+
+        Stack1.prefWidthProperty().bind(MainVBox.widthProperty());
+        Stack2.prefWidthProperty().bind(MainVBox.widthProperty());
+        
+        rectangle1.widthProperty().bind(Stack1.widthProperty());
+        rectangle1.heightProperty().bind(Stack1.heightProperty());
+
+        rectangle2.widthProperty().bind(Stack2.widthProperty());
+        rectangle2.heightProperty().bind(Stack2.heightProperty());
+
+
         try {
             this.submittedDocumentDao = new SubmittedDocumentDao();
             this.documentationDao = new DocumentationDao();
