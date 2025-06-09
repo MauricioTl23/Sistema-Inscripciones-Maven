@@ -11,11 +11,9 @@
             </goals>
             <properties>
                 <exec.vmArgs>--module-path "C:\Program Files\Java\javafx-sdk-23.0.2\lib" --add-modules javafx.controls,javafx.fxml,javafx.swing</exec.vmArgs>
-                <exec.vmArgs>--module-path /Users/mauricioteranlimari/javafx-sdk-24.0.1/lib --add-modules javafx.controls,javafx.fxml,javafx.swing</exec.vmArgs>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.appArgs></exec.appArgs>
-                <exec.mainClass>com.mycompany.inscripcionesjo.InscripcionesJO</exec.mainClass>
-                <exec.workingdir>C:\Users\intel\Documents\NetBeansProjects\Sistema-Inscripciones-Maven</exec.workingdir>
+                <exec.mainClass>${packageClassName}</exec.mainClass>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
@@ -30,12 +28,10 @@
             </goals>
             <properties>
                 <exec.vmArgs>--module-path "C:\Program Files\Java\javafx-sdk-23.0.2\lib" --add-modules javafx.controls,javafx.fxml,javafx.swing -agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
-                <exec.vmArgs>--module-path /Users/mauricioteranlimari/javafx-sdk-24.0.1/lib --add-modules javafx.controls,javafx.fxml,javafx.swing -agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.appArgs></exec.appArgs>
-                <exec.mainClass>com.mycompany.inscripcionesjo.InscripcionesJO</exec.mainClass>
+                <exec.mainClass>${packageClassName}</exec.mainClass>
                 <exec.executable>java</exec.executable>
-                <exec.workingdir>C:\Users\intel\Documents\NetBeansProjects\Sistema-Inscripciones-Maven</exec.workingdir>
                 <jpda.listen>true</jpda.listen>
             </properties>
         </action>
@@ -50,11 +46,9 @@
             </goals>
             <properties>
                 <exec.vmArgs>--module-path "C:\Program Files\Java\javafx-sdk-23.0.2\lib" --add-modules javafx.controls,javafx.fxml,javafx.swing</exec.vmArgs>
-                <exec.vmArgs>--module-path /Users/mauricioteranlimari/javafx-sdk-24.0.1/lib --add-modules javafx.controls,javafx.fxml,javafx.swing</exec.vmArgs>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
-                <exec.mainClass>com.mycompany.inscripcionesjo.InscripcionesJO</exec.mainClass>
+                <exec.mainClass>${packageClassName}</exec.mainClass>
                 <exec.executable>java</exec.executable>
-                <exec.workingdir>C:\Users\intel\Documents\NetBeansProjects\Sistema-Inscripciones-Maven</exec.workingdir>
                 <exec.appArgs></exec.appArgs>
             </properties>
         </action>

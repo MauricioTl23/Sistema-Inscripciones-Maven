@@ -24,7 +24,13 @@ public class EnrollementDao {
     }
     
     public int register(Enrollment inscripcion) {
+        
+        
         try {
+            int hasExist = getByIdStudentwithYear(inscripcion.getId_estudiante());
+            if(hasExist > 0){
+                return -1;
+            }
             String sql = "INSERT INTO inscripcion (id_estudiante, id_curso, id_usuario, fecha_inscripcion, gestion, estado, rude, observacion) "
                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -99,6 +105,100 @@ public class EnrollementDao {
         int idInscripcion = -1;
         try {
             String sql = "SELECT * FROM inscripcion WHERE id_estudiante = ? ORDER BY fecha_inscripcion DESC LIMIT 1";
+            Connection connection = dbConnection.getConnection();
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, idStudent); // Falta este set
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                idInscripcion = rs.getInt("idinscripcion");
+            }
+
+            rs.close();
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return idInscripcion;
+    }
+    
+    public Enrollment obtenerInscripcionConCursoSiguiente(int idEstudiante) {
+        Enrollment enrollment = null;
+
+        try {
+            Connection connection = dbConnection.getConnection();
+
+            // 1. Obtener la inscripción actual del estudiante en el año vigente
+            String sql = "SELECT * FROM inscripcion WHERE id_estudiante = ? AND YEAR(fecha_inscripcion) = YEAR(CURDATE())";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, idEstudiante);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                enrollment = new Enrollment();
+                enrollment.setIdinscripcion(rs.getInt("idinscripcion"));
+                enrollment.setId_estudiante(rs.getInt("id_estudiante"));
+                enrollment.setId_curso(rs.getInt("id_curso")); // Se actualizará más abajo
+                enrollment.setId_usuario(rs.getInt("id_usuario"));
+                enrollment.setFecha_inscripcion(rs.getDate("fecha_inscripcion"));
+                enrollment.setYear(rs.getInt("gestion"));
+                enrollment.setEstado(rs.getInt("estado"));
+                enrollment.setRude(rs.getInt("rude"));
+                enrollment.setObservacion(rs.getString("observacion"));
+
+                // 2. Obtener el curso asignado según si aprobó o no
+                String cursoSql = """
+                    SELECT 
+                        CASE 
+                            WHEN AVG(n.nota) >= 51 THEN (
+                                SELECT c2.idcurso
+                                FROM curso c2
+                                WHERE (c2.grado = c.grado + 1 AND c2.nivel = c.nivel)
+                    				OR (c2.grado = 5 AND c2.nivel = 0 AND c.grado = 0 AND c.nivel = 1)
+                                LIMIT 1
+                            )
+                            ELSE c.idcurso
+                        END AS idcurso
+                    FROM inscripcion i
+                    JOIN curso c ON i.id_curso = c.idcurso
+                    JOIN nota n ON n.id_inscripcion = i.idinscripcion
+                    WHERE i.gestion = YEAR(NOW()) - 1  AND i.id_estudiante = ?
+                    GROUP BY c.idcurso, c.grado, c.nivel
+                """;
+
+                PreparedStatement cursoStmt = connection.prepareStatement(cursoSql);
+                cursoStmt.setInt(1, idEstudiante);
+                ResultSet cursoRs = cursoStmt.executeQuery();
+
+                if (cursoRs.next()) {
+                    int nuevoCurso = cursoRs.getInt("idcurso");
+                    enrollment.setId_curso(nuevoCurso); // Modifica el curso con el calculado
+                }
+
+                cursoRs.close();
+                cursoStmt.close();
+            }
+
+            rs.close();
+            stmt.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // o lanzar una excepción personalizada
+        }
+
+        return enrollment;
+    }
+
+
+    
+    public int getByIdStudentwithYear(int idStudent) {
+        int idInscripcion = -1;
+        try {
+            String sql = "SELECT * FROM inscripcion WHERE id_estudiante = ? AND YEAR(fecha_inscripcion) = YEAR(CURDATE());";
             Connection connection = dbConnection.getConnection();
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, idStudent); // Falta este set

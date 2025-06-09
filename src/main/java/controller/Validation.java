@@ -16,7 +16,7 @@ public class Validation {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
-    public boolean civalid(String number, String cm, int dp) {
+    public static boolean civalid(String number, String cm, int dp) {
         boolean numberValid = number != null && number.matches("\\d{5,8}");
         boolean cmValid = cm == null || cm.trim().isEmpty() || cm.matches("[A-Z]{1,2}");
         boolean dpValid = dp != -1;
@@ -34,7 +34,7 @@ public class Validation {
     public static boolean VerifyName(String name) {
         return name != null && name.matches("^([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)(\\s[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$");
     }
-    public boolean ciValid(String input) {
+    public static boolean ciValid(String input) {
         return input.matches("^\\d{5,8}(-[A-Z]{1,2})?-(LP|SCZ|CBBA|OR|PT|CH|TJA|BE|PD)$");
     }
 

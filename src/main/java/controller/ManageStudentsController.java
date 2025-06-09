@@ -23,6 +23,7 @@ import model.Student;
 import Dao.StudentDao;
 import Dao.GuardianDao;
 import Dao.Student_GuardianDao;
+import Dao.EnrollementDao;
 import java.sql.SQLException;
 import java.awt.Desktop;
 import java.io.File;
@@ -42,8 +43,11 @@ import javafx.stage.StageStyle;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.io.InputStream;
+import javafx.scene.control.TableRow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import model.Enrollment;
+import model.Extras;
 
 public class ManageStudentsController implements Initializable, MainControllerAware {
 
@@ -72,15 +76,17 @@ public class ManageStudentsController implements Initializable, MainControllerAw
     private StudentDao studentDao;
     private GuardianDao guardianDao;
     private Student_GuardianDao student_GuardianDao;
-
+    private EnrollementDao enrollementDao;
     private ContextMenu OptionsStudents;
 
     private Student selectStudent;
+    private  Enrollment inscripcion;
 
     private MainMenuController mainController;
 
     private ObservableList<Student> data;
     private FilteredList<Student> filteredData;
+    private Extras extra;
 
     @Override
     public void setMainController(MainMenuController mainController) {
@@ -107,6 +113,7 @@ public class ManageStudentsController implements Initializable, MainControllerAw
             this.studentDao = new StudentDao();
             this.guardianDao = new GuardianDao();
             this.student_GuardianDao = new Student_GuardianDao();
+            this.enrollementDao = new EnrollementDao();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ManageUsersController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -119,7 +126,8 @@ public class ManageStudentsController implements Initializable, MainControllerAw
 
         MenuItem editT = new MenuItem("Editar Tutor");
         MenuItem delete = new MenuItem("Eliminar Estudiante");
-        OptionsStudents.getItems().addAll(editE, editT, delete);
+        MenuItem Enroll = new MenuItem("Inscribir Estudiante");
+        OptionsStudents.getItems().addAll(editE, editT, delete,Enroll);
 
         editE.setOnAction((ActionEvent t) -> {
             Student est = new Student();
@@ -192,6 +200,34 @@ public class ManageStudentsController implements Initializable, MainControllerAw
             }
         });
 
+        Enroll.setOnAction((ActionEvent t) -> {
+            int index = TblStudent.getSelectionModel().getFocusedIndex();
+
+            Student enrollStudent = TblStudent.getItems().get(index);
+            inscripcion = new Enrollment();
+            inscripcion.setId_estudiante(enrollStudent.getId());
+            
+            inscripcion.setId_usuario(mainController.logged.getId());
+            inscripcion.setFecha_inscripcion(java.sql.Date.valueOf(LocalDate.now()));
+            inscripcion.setYear(LocalDate.now().getYear());
+            inscripcion.setEstado(1);
+            Enrollment hireEnroll = new Enrollment();
+            hireEnroll = enrollementDao.obtenerInscripcionConCursoSiguiente(enrollStudent.getId());
+            if (hireEnroll == null) {
+                extra.showAlert("Error", "No se pudo obtener la inscripción anterior del estudiante.", Alert.AlertType.ERROR);
+                return;
+            }
+            inscripcion.setId_curso(hireEnroll.getId_curso());
+            inscripcion.setRude(hireEnroll.getRude());
+            inscripcion.setObservacion("Inscripcion Automatico");
+            
+            int succes = enrollementDao.register(inscripcion);
+            if(succes > 0){
+               extra.showAlert("Inscripcion Automatico", "Exito en la inscripcion", Alert.AlertType.WARNING);
+            }else{
+                extra.showAlert("Inscripcion Automatico", "Error en la inscripcion", Alert.AlertType.ERROR);
+            }
+        });
         TblStudent.setContextMenu(OptionsStudents);
 
         TextSearch.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -261,6 +297,25 @@ public class ManageStudentsController implements Initializable, MainControllerAw
 
         TableColumn<Student, String> Emailcol = new TableColumn<>("CORREO");
         Emailcol.setCellValueFactory(new PropertyValueFactory<>("correo"));
+
+        TblStudent.setRowFactory(tv -> new TableRow<Student>() {
+            @Override
+            protected void updateItem(Student student, boolean empty) {
+                super.updateItem(student, empty);
+                if (student == null || empty) {
+                    setStyle("");
+                } else {
+                    int idInscripcion = enrollementDao.getByIdStudentwithYear(student.getId());
+                    if (idInscripcion > 0) {
+                        // Tiene inscripción → azul
+                        getStyleClass().add("fila-azul");
+                    } else {
+                        // No tiene inscripción → gris
+                        getStyleClass().add("fila-gris");
+                    }
+                }
+            }
+        });
 
         TblStudent.getColumns().addAll(Idcol, Namecol, Surnamecol, datecol, CIcol, gendercol, adresscol, Emailcol);
         TblStudent.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
