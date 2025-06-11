@@ -41,7 +41,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Image icon = new Image(getClass().getResourceAsStream("/icons/inscripciones.gif"));
+        icon = new Image(getClass().getResourceAsStream("/icons/inscripciones.gif"));
         IconLogin.setImage(icon);
 
         Platform.runLater(() -> {
@@ -81,6 +81,8 @@ public class LoginController implements Initializable {
 
     @FXML
     private AnchorPane mainPane;
+    
+    private Image icon;
 
     private User user;
 
@@ -117,6 +119,7 @@ public class LoginController implements Initializable {
         }
 
     }
+    
 
     private void openMainMenu() {
         try {

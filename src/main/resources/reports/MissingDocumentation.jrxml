@@ -44,7 +44,7 @@
 				<reportElement x="20" y="15" width="150" height="150" uuid="5582dafc-b766-4f84-9d80-8f55cf97f701">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
-				<imageExpression><![CDATA["src/main/resources/icons/logoC.png"]]></imageExpression>
+				<imageExpression><![CDATA["icons/logoC.png"]]></imageExpression>
 			</image>
 			<textField textAdjust="StretchHeight" pattern="MMMMM dd, yyyy">
 				<reportElement x="550" y="105" width="241" height="30" uuid="c7aebe4b-8e80-4653-85ce-8db52d9fde41"/>

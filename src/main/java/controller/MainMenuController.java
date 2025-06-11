@@ -31,6 +31,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.Extras;
 import model.User;
+
 public class MainMenuController implements Initializable {
 
     @FXML
@@ -58,6 +59,7 @@ public class MainMenuController implements Initializable {
     public void init() {
         if (logged != null) {
             textuser.setText("Usuario: " + logged.getNombre() + " " + logged.getApellido());
+            loadSceneWithData("MenuOptions", logged);
         }
     }
 
@@ -91,8 +93,8 @@ public class MainMenuController implements Initializable {
 
         pageMap = new LinkedHashMap<>();
         pageMap.put("Menu Principal", "MenuOptions");
-        loadView("MenuOptions");
-        updateBreadcrumb();
+        /*loadSceneWithData("MenuOptions", logged);
+        updateBreadcrumb();*/
 
     }
 
@@ -187,12 +189,13 @@ public class MainMenuController implements Initializable {
 
     public void loadSceneWithData(String pageName, Object data) {
         try {
+
             System.out.println("Intentando cargar: " + pageName);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/" + pageName + ".fxml"));
             Parent root = loader.load();
             System.out.println("FXML cargado correctamente");
-
             Object controller = loader.getController();
+
             System.out.println("Controlador cargado: " + controller);
             // Verificar si el controlador implementa MainControllerAware
             if (controller instanceof MainControllerAware mainControllerAware) {

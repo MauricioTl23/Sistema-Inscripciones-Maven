@@ -1,0 +1,3 @@
+Número Reporte | Tipo de Reporte | Fecha Reporte
+1 | Estudiantes con Documentación Pendiente | 2025-06-10 20:42:37
+1 | Tutores de los Estudiantes | 2025-06-10 20:42:52

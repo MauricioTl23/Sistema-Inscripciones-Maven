@@ -9,6 +9,8 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -438,6 +440,10 @@ public class ReportPDFController implements Initializable {
     private void LoadReports() {
         TableReports.getItems().clear();
         TableReports.getColumns().clear();
+        
+        System.out.println("Directorio actual: " + System.getProperty("user.dir"));
+        Path p = Paths.get("NumberReports.txt");
+        System.out.println("Ruta del archivo: " + p.toAbsolutePath());
 
         List<String> result = ReportLogger.getMaxReportNumbersAllTypes();
         ObservableList<String[]> data = FXCollections.observableArrayList();

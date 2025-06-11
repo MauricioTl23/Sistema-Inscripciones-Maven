@@ -18,13 +18,13 @@ import java.util.List;
  * @author mauricioteranlimari
  */
 public class CourseDao {
-    
+
     private Database CourseConnection;
 
     private String[] optionsGrade = {"Primero", "Segundo", "Tercero", "Cuarto", "Quinto", "Sexto"};
 
-    private String[] optionsLevel = {"Primaria","Secundaria"};
-    
+    private String[] optionsLevel = {"Primaria", "Secundaria"};
+
     public CourseDao() throws ClassNotFoundException, SQLException {
 
         this.CourseConnection = new Database();
@@ -67,10 +67,8 @@ public class CourseDao {
 
         try {
 
-            String SQL = "SELECT DISTINCT curso.*, CONCAT(usuario.nombre, ' ', usuario.apellido), asesor.fecha_inicio,asesor.fecha_fin "
-                    + "FROM curso "
-                    + "LEFT JOIN asesor ON curso.idcurso = asesor.idcurso "
-                    + "LEFT JOIN usuario ON asesor.idusuario = usuario.idusuario";
+            String SQL = "SELECT DISTINCT curso.* "
+                    + "FROM curso ";
 
             Connection connection = this.CourseConnection.getConnection();
 
@@ -88,7 +86,7 @@ public class CourseDao {
                 course.setParalelo(data.getString(4).charAt(0));
                 course.setCupo_max(data.getInt(5));
                 course.setAdmite_nuevos(data.getBoolean(6));
-                String nameA = data.getString(7);
+                /*String nameA = data.getString(7);
 
                 if (nameA != null) {
                     course.setAsesor(nameA);
@@ -96,19 +94,17 @@ public class CourseDao {
                     course.setAsesor(null);
                 }
 
-                if(data.getDate(8) != null){
+                if (data.getDate(8) != null) {
                     course.setFechai(data.getDate(8).toLocalDate());
-                }else{
+                } else {
                     course.setFechai(null);
                 }
-                
-                if(data.getDate(9) != null){
+
+                if (data.getDate(9) != null) {
                     course.setFechaf(data.getDate(9).toLocalDate());
-                }else{
+                } else {
                     course.setFechaf(null);
-                }
-                
-                
+                }*/
 
                 listCourse.add(course);
 
@@ -274,7 +270,7 @@ public class CourseDao {
 
             while (data.next() == true) {
 
-                ListCAdvisors.add(optionsGrade[data.getInt("grado")] + " " + data.getString("paralelo")+"("+optionsLevel[data.getInt("nivel")]+")");
+                ListCAdvisors.add(optionsGrade[data.getInt("grado")] + " " + data.getString("paralelo") + "(" + optionsLevel[data.getInt("nivel")] + ")");
 
             }
             data.close();
@@ -290,7 +286,7 @@ public class CourseDao {
         }
         return ListCAdvisors;
     }
-    
+
     public List<String> CoursesAdvisorsC(int idusuario) {
         List<String> ListCAdvisors = new ArrayList<>();
         try {
@@ -303,14 +299,14 @@ public class CourseDao {
 
             Connection connection = this.CourseConnection.getConnection();
             PreparedStatement sentence = connection.prepareStatement(SQL);
-            
+
             sentence.setInt(1, idusuario);
 
             ResultSet data = sentence.executeQuery();
 
             while (data.next() == true) {
 
-                ListCAdvisors.add(optionsGrade[data.getInt("grado")] + " " + data.getString("paralelo")+"("+optionsLevel[data.getInt("nivel")]+")");
+                ListCAdvisors.add(optionsGrade[data.getInt("grado")] + " " + data.getString("paralelo") + "(" + optionsLevel[data.getInt("nivel")] + ")");
 
             }
             data.close();
@@ -327,7 +323,7 @@ public class CourseDao {
         return ListCAdvisors;
     }
 
-    public int idcourse(int level,String fullname) {
+    public int idcourse(int level, String fullname) {
         int idcurso = 0;
         try {
 
@@ -357,5 +353,5 @@ public class CourseDao {
         }
         return idcurso;
     }
-    
+
 }

@@ -16,7 +16,7 @@
         <URL value="@menuoptions.css" />
     </stylesheets>
    <children>
-      <HBox spacing="25" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+      <HBox fx:id="MainHBox" spacing="25" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
          <children>
             <StackPane fx:id="stackPane1" prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
                <children>

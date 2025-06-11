@@ -57,10 +57,10 @@ public class ManageStudentsController implements Initializable, MainControllerAw
     private TableView<Student> TblStudent;
     @FXML
     private TextField TextSearch;
-    
+
     @FXML
     private VBox MainVBox;
-    
+
     @FXML
     private Rectangle rectangle1;
 
@@ -80,7 +80,7 @@ public class ManageStudentsController implements Initializable, MainControllerAw
     private ContextMenu OptionsStudents;
 
     private Student selectStudent;
-    private  Enrollment inscripcion;
+    private Enrollment inscripcion;
 
     private MainMenuController mainController;
 
@@ -95,7 +95,7 @@ public class ManageStudentsController implements Initializable, MainControllerAw
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         stack1.prefHeightProperty().bind(MainVBox.heightProperty().multiply(1.5 / 10.0));
         stack2.prefHeightProperty().bind(MainVBox.heightProperty().multiply(8.5 / 10.0));
 
@@ -107,7 +107,7 @@ public class ManageStudentsController implements Initializable, MainControllerAw
 
         rectangle2.widthProperty().bind(stack2.widthProperty());
         rectangle2.heightProperty().bind(stack2.heightProperty());
-        
+
         btnEstudianteNuevo.setOnAction(e -> navigateTo("Estudiante Nuevo", "ExistingStudent"));
         try {
             this.studentDao = new StudentDao();
@@ -127,7 +127,7 @@ public class ManageStudentsController implements Initializable, MainControllerAw
         MenuItem editT = new MenuItem("Editar Tutor");
         MenuItem delete = new MenuItem("Eliminar Estudiante");
         MenuItem Enroll = new MenuItem("Inscribir Estudiante");
-        OptionsStudents.getItems().addAll(editE, editT, delete,Enroll);
+        OptionsStudents.getItems().addAll(editE, editT, delete, Enroll);
 
         editE.setOnAction((ActionEvent t) -> {
             Student est = new Student();
@@ -146,7 +146,12 @@ public class ManageStudentsController implements Initializable, MainControllerAw
             Student est = new Student();
 
             int index = TblStudent.getSelectionModel().getSelectedIndex();
-            selectStudent = TblStudent.getItems().get(index);
+            if (index >= 0) {
+                selectStudent = TblStudent.getItems().get(index);
+            } else {
+                Extras.showAlert("Advertencia", "No hay estudiante seleccionado", Alert.AlertType.WARNING);
+            }
+            
             if (mainController != null) {
                 mainController.loadSceneWithData("Guardian", selectStudent.getId());
                 mainController.addPage("Tutores de " + selectStudent.getNombre() + " " + selectStudent.getApellido(), "Guardian");
@@ -206,7 +211,7 @@ public class ManageStudentsController implements Initializable, MainControllerAw
             Student enrollStudent = TblStudent.getItems().get(index);
             inscripcion = new Enrollment();
             inscripcion.setId_estudiante(enrollStudent.getId());
-            
+
             inscripcion.setId_usuario(mainController.logged.getId());
             inscripcion.setFecha_inscripcion(java.sql.Date.valueOf(LocalDate.now()));
             inscripcion.setYear(LocalDate.now().getYear());
@@ -214,18 +219,18 @@ public class ManageStudentsController implements Initializable, MainControllerAw
             Enrollment hireEnroll = new Enrollment();
             hireEnroll = enrollementDao.obtenerInscripcionConCursoSiguiente(enrollStudent.getId());
             if (hireEnroll == null) {
-                extra.showAlert("Error", "No se pudo obtener la inscripción anterior del estudiante.", Alert.AlertType.ERROR);
+                Extras.showAlert("Error", "No se pudo obtener la inscripción anterior del estudiante.", Alert.AlertType.ERROR);
                 return;
             }
             inscripcion.setId_curso(hireEnroll.getId_curso());
             inscripcion.setRude(hireEnroll.getRude());
             inscripcion.setObservacion("Inscripcion Automatico");
-            
+
             int succes = enrollementDao.register(inscripcion);
-            if(succes > 0){
-               extra.showAlert("Inscripcion Automatico", "Exito en la inscripcion", Alert.AlertType.WARNING);
-            }else{
-                extra.showAlert("Inscripcion Automatico", "Error en la inscripcion", Alert.AlertType.ERROR);
+            if (succes > 0) {
+                Extras.showAlert("Inscripcion Automatico", "Exito en la inscripcion", Alert.AlertType.WARNING);
+            } else {
+                Extras.showAlert("Inscripcion Automatico", "Error en la inscripcion", Alert.AlertType.ERROR);
             }
         });
         TblStudent.setContextMenu(OptionsStudents);
@@ -345,7 +350,6 @@ public class ManageStudentsController implements Initializable, MainControllerAw
                 System.out.println("No se pudo cargar el logo. Se continúa sin imagen.");
                 e.printStackTrace();
             }
-
 
             // Nombre de la unidad educativa
             Paragraph nombreUnidad = new Paragraph("UNIDAD EDUCATIVA “JORGE OBLITAS”",

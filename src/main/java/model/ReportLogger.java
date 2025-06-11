@@ -19,22 +19,29 @@ import java.util.Map;
  */
 public class ReportLogger {
 
+    private static final String BASE_DIR = System.getProperty("working.dir", "src/main/resources");
     private static final String FILE_NAME = "NumberReports.txt";
+    private static final Path FILE_PATH = Paths.get(BASE_DIR).resolve(FILE_NAME);
+
     private static final String HEADER = "Número Reporte | Tipo de Reporte | Fecha Reporte";
 
     public static void logReport(String tipoReporte) {
-        Path filePath = Paths.get(FILE_NAME);
         int nextReportNumber = 1;
 
         try {
-            if (!Files.exists(filePath)) {
-                Files.createFile(filePath);
-                Files.write(filePath, (HEADER + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+            // Crear carpeta si no existe
+            if (!Files.exists(FILE_PATH.getParent())) {
+                Files.createDirectories(FILE_PATH.getParent());
             }
 
-            try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+            if (!Files.exists(FILE_PATH)) {
+                Files.createFile(FILE_PATH);
+                Files.write(FILE_PATH, (HEADER + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+            }
+
+            try (BufferedReader reader = Files.newBufferedReader(FILE_PATH)) {
                 String line;
-                for (line = reader.readLine(); line != null; line = reader.readLine()) {
+                while ((line = reader.readLine()) != null) {
                     if (!line.trim().isEmpty() && !line.trim().equals(HEADER)) {
                         String[] parts = line.split("\\|");
                         if (parts.length >= 2) {
@@ -55,27 +62,25 @@ public class ReportLogger {
                 }
             }
 
-            // Preparar nueva línea de reporte
             String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             String newLine = String.format("%d | %s | %s", nextReportNumber, tipoReporte, date);
 
-            // Guardar en archivo
-            Files.write(filePath, (newLine + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+            Files.write(FILE_PATH, (newLine + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
 
-            System.out.println("Reporte guardado correctamente.");
+            System.out.println("Reporte guardado correctamente en: " + FILE_PATH);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    // Método para obtener el próximo número de reporte, igual usando FILE_PATH
     public static int getNextReportNumber(String tipoReporte) {
-        Path filePath = Paths.get(FILE_NAME);
         int nextReportNumber = 1;
 
         try {
-            if (Files.exists(filePath)) {
-                try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+            if (Files.exists(FILE_PATH)) {
+                try (BufferedReader reader = Files.newBufferedReader(FILE_PATH)) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         if (!line.trim().isEmpty() && !line.trim().equals(HEADER)) {
@@ -104,13 +109,13 @@ public class ReportLogger {
         return nextReportNumber;
     }
 
+    // Método para obtener máximos por tipo, igual usando FILE_PATH
     public static List<String> getMaxReportNumbersAllTypes() {
-        Path filePath = Paths.get(FILE_NAME);
         Map<String, Integer> maxNumbersByType = new HashMap<>();
 
         try {
-            if (Files.exists(filePath)) {
-                try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+            if (Files.exists(FILE_PATH)) {
+                try (BufferedReader reader = Files.newBufferedReader(FILE_PATH)) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         if (!line.trim().isEmpty() && !line.trim().equals(HEADER)) {
@@ -135,7 +140,7 @@ public class ReportLogger {
 
         List<String> result = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : maxNumbersByType.entrySet()) {
-            result.add(entry.getKey() + "," + entry.getValue()); // <-- tipo primero, luego número
+            result.add(entry.getKey() + "," + entry.getValue());
         }
 
         return result;
