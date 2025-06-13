@@ -5,7 +5,13 @@
 package controller;
 
 import interfaces.MainControllerAware;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -115,14 +121,39 @@ public class MenuOptionsController implements Initializable, MainControllerAware
         pageMap.put("Configuracion", "SchoolSettings");
         pageMap.put("Reportes", "Report");
         pageMap.put("Gestionar Notas", "ManageGrades");
-        pageMap.put("Ayuda", "Help");
         pageMap.put("Gestionar Usuarios", "ManageUsers");
 
         btnGestionarEstudiantes.setOnAction(e -> navigateTo("Gestionar Estudiantes"));
         btnConfiguracion.setOnAction(e -> navigateTo("Configuracion"));
         btnReportes.setOnAction(e -> navigateTo("Reportes"));
         btnGestionarNotas.setOnAction(e -> navigateTo("Gestionar Notas"));
-        btnAyuda.setOnAction(e -> navigateTo("Ayuda"));
+        btnAyuda.setOnAction(e -> {
+        try {
+            // Cargar el recurso desde el classpath
+            InputStream input = getClass().getResourceAsStream("/icons/ManualdeUsuario.pdf");
+            if (input == null) {
+                System.out.println("Archivo no encontrado");
+                return;
+            }
+
+            // Crear archivo temporal
+            File tempFile = File.createTempFile("ManualdeUsuario", ".pdf");
+            tempFile.deleteOnExit();
+
+            // Copiar el contenido del recurso al archivo temporal
+            Files.copy(input, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            // Abrir el archivo con el visor de PDF predeterminado del sistema
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(tempFile);
+            } else {
+                System.out.println("Desktop no soportado en este sistema.");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    });
+
         btnGestionarUsuarios.setOnAction(e -> navigateTo("Gestionar Usuarios"));
 
     }

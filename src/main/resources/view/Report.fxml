@@ -96,10 +96,10 @@
                                 </Label>
                                 <VBox alignment="CENTER" spacing="15.0" VBox.vgrow="ALWAYS">
                                     <children>
-                                        <ImageView fx:id="INotify1" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                        <Button fx:id="btnNotifications" mnemonicParsing="false" prefHeight="35.0" prefWidth="178.0" text="SISTEMA" />
                                         <ImageView fx:id="INotify2" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                                         <Button fx:id="btnNotify" mnemonicParsing="false" prefHeight="50.0" prefWidth="178.0" text="PADRES DE FAMILIA" />
+                              <ImageView fx:id="INotify21" fitHeight="200.0" fitWidth="200.0" layoutX="90.0" layoutY="155.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                              <Button fx:id="btnNotify1" layoutX="10.0" layoutY="260.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="178.0" text="PADRES DE FAMILIA" visible="false" />
                                     </children>
                                     <VBox.margin>
                                         <Insets bottom="15.0" left="25.0" right="25.0" top="15.0" />

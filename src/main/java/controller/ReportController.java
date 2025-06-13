@@ -33,8 +33,6 @@ public class ReportController implements Initializable, MainControllerAware {
     @FXML
     private Button btnNotify;
 
-    @FXML
-    private Button btnNotifications;
 
     @FXML
     private Rectangle rectangle1;
@@ -68,9 +66,6 @@ public class ReportController implements Initializable, MainControllerAware {
 
     @FXML
     private ImageView IAdministrative2;
-
-    @FXML
-    private ImageView INotify1;
 
     @FXML
     private ImageView INotify2;
@@ -118,8 +113,6 @@ public class ReportController implements Initializable, MainControllerAware {
         Image icon2Admin = new Image(getClass().getResourceAsStream("/icons/ReportUsers.gif"));
         IAdministrative2.setImage(icon2Admin);
         
-        Image icon1Not = new Image(getClass().getResourceAsStream("/icons/NotifySystem.gif"));
-        INotify1.setImage(icon1Not);
         
         Image icon2Not = new Image(getClass().getResourceAsStream("/icons/NotifyPPFF.gif"));
         INotify2.setImage(icon2Not);
@@ -136,7 +129,6 @@ public class ReportController implements Initializable, MainControllerAware {
         btnUsers.setOnAction(e -> navigateTo("Usuarios"));
         btnCourse.setOnAction(e -> navigateTo("Curso"));
         btnNotify.setOnAction(e -> navigateTo("Notificar"));
-        btnNotifications.setOnAction(e -> navigateTo("Notificaciones"));
         BtnReportPDF.setOnAction(e -> navigateTo("ReportesPDF"));
         BtnStatistics.setOnAction(e -> navigateTo("Estadisticas"));
     }
